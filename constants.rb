@@ -20,7 +20,7 @@ module Tetris
 
     NEXT_TOP    = 100
     NEXT_LEFT   = SCORE_LEFT
-    NEXT_WIDTH  = 5 * BLOCK_SIDE
+    NEXT_WIDTH  = 6 * BLOCK_SIDE
     NEXT_HEIGHT = 4 * BLOCK_SIDE
 
     # Colours
