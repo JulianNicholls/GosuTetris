@@ -71,6 +71,11 @@ module Tetris
       case btn_id
       when Gosu::KbEscape   then  close
       when Gosu::KbR        then  reset
+
+      when Gosu::KbDown     then  @cur.down
+      when Gosu::KbLeft     then  @cur.left
+      when Gosu::KbRight    then  @cur.right
+      when Gosu::KbUp       then  @cur.rotate
       end
     end
   end
