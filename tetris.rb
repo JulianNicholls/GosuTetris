@@ -4,6 +4,8 @@ require './gosu_enhanced'
 require './constants'
 require './resources'
 require './shapes'
+require './blockmap'
+require './block'
 
 module Tetris
   # Tetris Game
@@ -12,7 +14,7 @@ module Tetris
     include Constants
 
     def initialize
-      super( WIDTH, HEIGHT, false, 250 )
+      super( WIDTH, HEIGHT, false, 125 )
 
       self.caption = 'Jetris'
 
@@ -24,10 +26,12 @@ module Tetris
     def reset
       @lines = 0
       @cur, @next = Shape.next( self ), Shape.next( self )
+      @down_time = 0
+      @block_map = BlockMap.new
     end
 
     def update
-      # Bugger all
+      @down_time = (@down_time + 1) % 4
     end
 
     def draw
@@ -35,6 +39,7 @@ module Tetris
       draw_score
       @cur.draw
       @next.draw_absolute( NEXT_LEFT + BLOCK_SIDE, NEXT_TOP + BLOCK_SIDE )
+      @block_map.draw( self )
     end
 
     def draw_background
