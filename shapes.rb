@@ -29,7 +29,7 @@ module Tetris
     end
 
     def rotate
-      @orient += 1
+      @orient = (@orient + 1) % @map.size
     end
 
     def down
@@ -42,6 +42,21 @@ module Tetris
 
     def left
       @left -= 1 if @left > 0
+    end
+
+    def draw
+      @map[@orient].each do |point|
+        draw_block( WELL_BORDER + (@left + point[0]) * BLOCK_SIDE,
+                    (@top + point[1]) * BLOCK_SIDE )
+      end
+    end
+
+    # Draw at a specific place in the default orientation
+
+    def draw_absolute( left, top )
+      @map[0].each do |point|
+        draw_block( left + point[0] * BLOCK_SIDE, top + point[1] * BLOCK_SIDE )
+      end
     end
 
     protected
