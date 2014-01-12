@@ -51,7 +51,7 @@ module Tetris
     end
 
     def width
-      @map[@orient].map{ |p| p[0] }.max + 1
+      @map[@orient].map { |p| p[0] }.max + 1
     end
 
     def draw
