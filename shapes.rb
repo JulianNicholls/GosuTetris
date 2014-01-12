@@ -1,5 +1,7 @@
 # Shapes
 
+require './block'
+
 module Tetris
   # Base class for the four shapes
 
@@ -44,10 +46,17 @@ module Tetris
       @left -= 1 if @left > 0
     end
 
+    def rightable?
+      @left + width < COLUMNS
+    end
+
+    def width
+      @map[@orient].map{ |p| p[0] }.max + 1
+    end
+
     def draw
       @map[@orient].each do |point|
-        draw_block( WELL_BORDER + (@left + point[0]) * BLOCK_SIDE,
-                    (@top + point[1]) * BLOCK_SIDE )
+        Block.draw( @window, @top + point[1], @left + point[0], @colour )
       end
     end
 
@@ -55,17 +64,11 @@ module Tetris
 
     def draw_absolute( left, top )
       @map[0].each do |point|
-        draw_block( left + point[0] * BLOCK_SIDE, top + point[1] * BLOCK_SIDE )
+        Block.draw_absolute(
+          @window,
+          left + point[0] * BLOCK_SIDE, top + point[1] * BLOCK_SIDE,
+          @colour )
       end
-    end
-
-    protected
-
-    def draw_block( left, top )
-      @window.draw_rectangle( left, top, BLOCK_SIDE, BLOCK_SIDE, 1,
-                              Gosu::Color::WHITE )
-      @window.draw_rectangle( left + 1, top + 1, BLOCK_SIDE - 2, BLOCK_SIDE - 2, 1,
-                              @colour )
     end
   end
 end
