@@ -10,6 +10,8 @@ module Tetris
 
     attr_reader :left, :top
 
+    @prev_colour = -1
+
     def initialize( window )
       @window = window
       @colour = Shape.colour  # Random Colour
@@ -18,16 +20,25 @@ module Tetris
     end
 
     def self.next( window )
-      case rand( 1..4 )
+      case rand( 1..5 )
       when 1 then RightEll.new( window )
       when 2 then LeftEll.new( window )
       when 3 then Tee.new( window )
       when 4 then Bar.new( window )
+      when 5 then Square.new( window )
       end
     end
 
+    # Return a random colour, but a different one from the immediately
+    # previous one
+
     def self.colour
-      [RED, GREEN, BLUE, PURPLE][rand 0..3]
+      colour = rand( 0..5 )
+
+      colour = rand( 0..5 ) while colour == @prev_colour
+      @prev_colour = colour
+
+      [RED, GREEN, BLUE, PURPLE, AQUA, YELLOW][colour]
     end
 
     def rotate
@@ -35,25 +46,19 @@ module Tetris
     end
 
     def down( block_map )
-      moveable = @map[@orient].all? do |point|
-        block_map.empty?( point[1] + @top + 1, point[0] + @left )
-      end
+      ok = downable( block_map )
+      @top += 1 if ok
 
-      @top += 1 if moveable
-
-      moveable
+      ok    # Return whether we moved so that we know when the bottom is reached
     end
 
     def right
       @left += 1 if rightable?
     end
 
+    # TODO check whether there's anything in the way
     def left
       @left -= 1 if @left > 0
-    end
-
-    def rightable?
-      @left + width < COLUMNS
     end
 
     def width
@@ -86,8 +91,20 @@ module Tetris
           @colour )
       end
     end
+
+    protected
+
+    # TODO check whether there's anything in the way as well
+    def rightable?
+      @left + width < COLUMNS
+    end
+
+    def downable( block_map )
+      @map[@orient].all? do |point|
+        block_map.empty?( point[1] + @top + 1, point[0] + @left )
+      end
+    end
   end
 end
 
-require './ells'
-require './teabar'
+require './dropshapes'
