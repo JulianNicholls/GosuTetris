@@ -14,9 +14,9 @@ module Tetris
     include Constants
 
     def initialize
-      super( WIDTH, HEIGHT, false, 125 )
+      super( WIDTH, HEIGHT, false, 100 )
 
-      self.caption = 'Jetris'
+      self.caption = 'Gosu Tetris'
 
       @fonts = ResourceLoader.fonts( self )
 
@@ -27,33 +27,40 @@ module Tetris
       @lines = 0
       @cur, @next = Shape.next( self ), Shape.next( self )
       @down_time  = 0
-      @block_map  = BlockMap.new
+      @stack      = BlockMap.new
       @down_set   = false
+      @level      = 7     # Slow to begin with
+      @paused     = false
     end
 
     def update
-      @down_time = (@down_time + 1) % 5   # Slow to begin with
+      unless @paused
+        @down_time = (@down_time + 1) % @level
 
-      update_block_down if @down_time == 0 || @down_set
+        update_block_down if @down_time == 0 || @down_set
 
-      @down_set = false
+        @down_set = false
+      end
     end
 
     def update_block_down
-      unless @cur.down( @block_map )   # Reached bottom or a block in the way
-        @block_map.add( @cur.blocks )
-        @lines += @block_map.complete_lines
-        @cur  = @next
-        @next = Shape.next( self )
+      unless @cur.down( @stack )   # Reached bottom or a block in the way
+        @stack.add( @cur.blocks )
+        @lines += @stack.complete_lines
+        @level  = [2, 7 - @lines / 10].max   # Speed up
+        @cur    = @next
+        @next   = Shape.next( self )
       end
     end
 
     def draw
       draw_background
       draw_score
+      @stack.draw( self )
       @cur.draw
       @next.draw_absolute( NEXT_LEFT + BLOCK_SIDE, NEXT_TOP + BLOCK_SIDE )
-      @block_map.draw( self )
+
+      draw_paused if @paused
     end
 
     def draw_background
@@ -86,10 +93,22 @@ module Tetris
                            1, 1, Gosu::Color::WHITE )
     end
 
+    def draw_paused
+      draw_rectangle( 60, 110, WIDTH - 120, HEIGHT - 220, 10, 0x60ffffff )
+      p     = "PAUSED"
+      font  = @fonts[:pause]
+
+      width, height = font.measure( p )
+
+      font.draw( "PAUSED", (WIDTH - width) / 2, (HEIGHT - height) / 2, 10,
+                 1, 1, BLUE )
+    end
+
     def button_down( btn_id )
       case btn_id
       when Gosu::KbEscape   then  close
       when Gosu::KbR        then  reset
+      when Gosu::KbP        then  @paused = !@paused
 
       when Gosu::KbDown     then  @down_set = true
       when Gosu::KbLeft     then  @cur.left
