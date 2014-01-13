@@ -34,8 +34,14 @@ module Tetris
       @orient = (@orient + 1) % @map.size
     end
 
-    def down
-      @top += 1
+    def down( block_map )
+      moveable = @map[@orient].all? do |point|
+        block_map.empty?( point[1] + @top + 1, point[0] + @left )
+      end
+
+      @top += 1 if moveable
+
+      moveable
     end
 
     def right
@@ -52,6 +58,16 @@ module Tetris
 
     def width
       @map[@orient].map { |p| p[0] }.max + 1
+    end
+
+    def blocks
+      @map[@orient].map do |point|
+        {
+          row:    @top + point[1],
+          column: @left + point[0],
+          colour: @colour
+        }
+      end
     end
 
     def draw
