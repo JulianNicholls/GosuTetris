@@ -19,8 +19,10 @@ module Tetris
     end
 
     def add( blocks )
-      blocks.each { |block| @blocks[block[:row]][block[:column]] = block[:colour] }
+      blocks.each { |b| @blocks[b[:row]][b[:column]] = b[:colour] }
     end
+
+    # Check for complete lines from the bottom to the top
 
     def complete_lines
       row, lines_removed = ROWS - 1, 0
@@ -38,6 +40,8 @@ module Tetris
       lines_removed
     end
 
+    # Draw the occupied blocks
+
     def draw( window )
       @blocks.each_with_index do |columns, ridx|
         columns.each_with_index do |colour, cidx|
@@ -47,6 +51,8 @@ module Tetris
     end
 
     protected
+
+    # Remove a line, dropping down all the lines above
 
     def remove_line( row )
       row.downto( 1 ).each { |r| @blocks[r] = @blocks[r - 1] }
