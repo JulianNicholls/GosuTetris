@@ -7,23 +7,50 @@ module Tetris
     include Constants
 
     def initialize
-      @map = Array.new( ROWS, Array.new( COLUMNS, 0 ) )
+      @blocks = Array.new( ROWS ) { |idx| Array.new( COLUMNS, 0 ) }
     end
 
     def at( row, column )
-      @map[row, column]
+      @blocks[row][column]
     end
 
     def empty?( row, column )
-      at( row, column ) == 0
+      (row < ROWS) && at( row, column ) == 0
+    end
+
+    def add( blocks )
+      blocks.each { |block| @blocks[block[:row]][block[:column]] = block[:colour] }
+    end
+
+    def complete_lines
+      row, lines_removed = ROWS - 1, 0
+
+      loop do
+        if @blocks[row].any? { |colour| colour == 0 }
+          row -= 1
+          break if row < 1
+        else
+          remove_line( row )
+          lines_removed += 1
+        end
+      end
+
+      lines_removed
     end
 
     def draw( window )
-      @map.each_with_index do |columns, ridx|
+      @blocks.each_with_index do |columns, ridx|
         columns.each_with_index do |colour, cidx|
           Block.draw( window, ridx, cidx, colour ) unless colour == 0
         end
       end
+    end
+
+    protected
+
+    def remove_line( row )
+      row.downto( 1 ).each { |r| @blocks[r] = @blocks[r - 1] }
+      @blocks[0] = Array.new( COLUMNS, 0 )
     end
   end
 end
