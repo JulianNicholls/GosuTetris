@@ -26,12 +26,26 @@ module Tetris
     def reset
       @lines = 0
       @cur, @next = Shape.next( self ), Shape.next( self )
-      @down_time = 0
-      @block_map = BlockMap.new
+      @down_time  = 0
+      @block_map  = BlockMap.new
+      @down_set   = false
     end
 
     def update
-      @down_time = (@down_time + 1) % 4
+      @down_time = (@down_time + 1) % 5   # Slow to begin with
+
+      update_block_down if @down_time == 0 || @down_set
+
+      @down_set = false
+    end
+
+    def update_block_down
+      unless @cur.down( @block_map )   # Reached bottom or a block in the way
+        @block_map.add( @cur.blocks )
+        @lines += @block_map.complete_lines
+        @cur  = @next
+        @next = Shape.next( self )
+      end
     end
 
     def draw
@@ -77,7 +91,7 @@ module Tetris
       when Gosu::KbEscape   then  close
       when Gosu::KbR        then  reset
 
-      when Gosu::KbDown     then  @cur.down
+      when Gosu::KbDown     then  @down_set = true
       when Gosu::KbLeft     then  @cur.left
       when Gosu::KbRight    then  @cur.right
       when Gosu::KbUp       then  @cur.rotate
