@@ -13,6 +13,17 @@ module Tetris
   class Game < Gosu::Window
     include Constants
 
+    KEY_FUNCS = {
+      Gosu::KbEscape   =>  :close,
+      Gosu::KbR        =>  :reset,
+      Gosu::KbP        =>  :toggle_paused,
+
+      Gosu::KbDown     =>  :user_pressed_down,
+      Gosu::KbLeft     =>  :move_left,
+      Gosu::KbRight    =>  :move_right,
+      Gosu::KbUp       =>  :rotate
+    }
+
     def initialize
       super( WIDTH, HEIGHT, false, 100 )
 
@@ -25,21 +36,21 @@ module Tetris
 
     def reset
       @lines = 0
-      @cur, @next = Shape.next( self ), Shape.next( self )
-      @down_time  = 0
-      @stack      = BlockMap.new
-      @down_set   = false
-      @level      = 7     # Slow to begin with
-      @paused     = false
+      @cur, @next   = Shape.next( self ), Shape.next( self )
+      @down_time    = 0
+      @stack        = BlockMap.new
+      @down_pressed = false
+      @level        = 7     # Slow to begin with
+      @paused       = false
     end
 
     def update
       unless @paused
         @down_time = (@down_time + 1) % @level
 
-        update_block_down if @down_time == 0 || @down_set
+        update_block_down if @down_time == 0 || @down_pressed
 
-        @down_set = false
+        @down_pressed = false
       end
     end
 
@@ -94,27 +105,39 @@ module Tetris
     end
 
     def draw_paused
-      draw_rectangle( 60, 110, WIDTH - 120, HEIGHT - 220, 10, 0x60ffffff )
-      p     = "PAUSED"
+      draw_rectangle( 60, 110, WIDTH - 120, HEIGHT - 220, 10, 0x60000000 )
+      p     = 'PAUSED'
       font  = @fonts[:pause]
 
       width, height = font.measure( p )
 
-      font.draw( "PAUSED", (WIDTH - width) / 2, (HEIGHT - height) / 2, 10,
-                 1, 1, BLUE )
+      font.draw( p, (WIDTH - width) / 2, (HEIGHT - height) / 2, 10, 1, 1, BLUE )
     end
 
     def button_down( btn_id )
-      case btn_id
-      when Gosu::KbEscape   then  close
-      when Gosu::KbR        then  reset
-      when Gosu::KbP        then  @paused = !@paused
+      send( KEY_FUNCS[btn_id] ) if KEY_FUNCS.key? btn_id
+    end
 
-      when Gosu::KbDown     then  @down_set = true
-      when Gosu::KbLeft     then  @cur.left
-      when Gosu::KbRight    then  @cur.right
-      when Gosu::KbUp       then  @cur.rotate
-      end
+    protected
+
+    def toggle_paused
+      @paused = !@paused
+    end
+
+    def user_pressed_down
+      @down_pressed = true
+    end
+
+    def move_left
+      @cur.left( @stack )
+    end
+
+    def move_right
+      @cur.right( @stack )
+    end
+
+    def rotate
+      @cur.rotate
     end
   end
 end
