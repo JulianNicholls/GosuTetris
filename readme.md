@@ -1,18 +1,13 @@
 # Tetris using Gosu
 
 There's not a lot to say... It's Tetris done with the Ruby
-[Gosu](http:http://www.libgosu.org/) Library.
+[Gosu](http://www.libgosu.org/) Library.
 
 ## Updated in this version
 
-Added more colours and the other shape that I forgot :-) The colours are more varied
-too, it's still random but it will no longer return the same colour twice in a row.
-
-Added pausing.
+Moving left and right ensure that it is possible first now.
 
 ## TODO
-
-Moving left and right can go through already-dropped blocks.
 
 Check for the game being finished because there is a block in the top row.
 
