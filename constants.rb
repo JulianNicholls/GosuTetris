@@ -4,16 +4,16 @@ module Tetris
   # Constants for the Tetris Game
 
   module Constants
-    WIDTH   = 540
-    HEIGHT  = 570
-
     WELL_BORDER = 10
     COLUMNS     = 10
     ROWS        = 20
 
-    PANEL_WIDTH = 250
+    PANEL_WIDTH = 210
 
     BLOCK_SIDE  = 28
+
+    WIDTH       = WELL_BORDER + COLUMNS * BLOCK_SIDE + PANEL_WIDTH
+    HEIGHT      = WELL_BORDER + ROWS * BLOCK_SIDE
 
     SCORE_TOP   = 20
     SCORE_LEFT  = WIDTH - (PANEL_WIDTH - 20)
