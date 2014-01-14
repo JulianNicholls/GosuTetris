@@ -11,11 +11,16 @@ module Tetris
     end
 
     def at( row, column )
+      fail "Invalid Row" unless row.between?( 0, ROWS - 1 )
+      fail "Invalid Column" unless column.between?( 0, COLUMNS - 1 )
+
       @blocks[row][column]
     end
 
     def empty?( row, column )
-      (row < ROWS) && at( row, column ) == 0
+      row < ROWS &&
+      column.between?( 0, COLUMNS - 1 ) &&
+      at( row, column ) == 0
     end
 
     def add( blocks )
@@ -29,8 +34,7 @@ module Tetris
 
       loop do
         if @blocks[row].any? { |colour| colour == 0 }
-          row -= 1
-          break if row < 1
+          break if (row -= 1) < 1
         else
           remove_line( row )
           lines_removed += 1
