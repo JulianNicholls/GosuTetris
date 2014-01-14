@@ -45,20 +45,19 @@ module Tetris
       @orient = (@orient + 1) % @map.size
     end
 
-    def down( block_map )
-      ok = downable( block_map )
+    def down( stack )
+      ok = downable?( stack )
       @top += 1 if ok
 
       ok    # Return whether we moved so that we know when the bottom is reached
     end
 
-    def right
-      @left += 1 if rightable?
+    def right( stack )
+      @left += 1 if rightable?( stack )
     end
 
-    # TODO check whether there's anything in the way
-    def left
-      @left -= 1 if @left > 0
+    def left( stack )
+      @left -= 1 if leftable?( stack )
     end
 
     def width
@@ -94,14 +93,21 @@ module Tetris
 
     protected
 
-    # TODO check whether there's anything in the way as well
-    def rightable?
-      @left + width < COLUMNS
+    def rightable?( stack )
+      @map[@orient].all? do |point|
+        stack.empty?( point[1] + @top, point[0] + @left + 1 )
+      end
     end
 
-    def downable( block_map )
+    def leftable?( stack )
       @map[@orient].all? do |point|
-        block_map.empty?( point[1] + @top + 1, point[0] + @left )
+        stack.empty?( point[1] + @top, point[0] + @left - 1  )
+      end
+    end
+
+    def downable?( stack )
+      @map[@orient].all? do |point|
+        stack.empty?( point[1] + @top + 1, point[0] + @left )
       end
     end
   end
