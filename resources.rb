@@ -7,7 +7,7 @@ module Tetris
     def self.fonts( window )
       {
         score:    Gosu::Font.new( window, 'Arial', 30 ),
-        pause:    Gosu::Font.new( window, 'Serif', 48 )
+        pause:    Gosu::Font.new( window, 'Arial', 56 )
       }
     end
   end
