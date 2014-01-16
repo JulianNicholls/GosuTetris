@@ -76,7 +76,9 @@ module Tetris
 
     def draw
       @map[@orient].each do |point|
-        Block.draw( @window, @top + point[1], @left + point[0], @colour )
+        Block.draw( @window,
+                    GridPoint.new( @top + point[1], @left + point[0] ),
+                    @colour )
       end
     end
 
@@ -86,7 +88,7 @@ module Tetris
       @map[0].each do |point|
         Block.draw_absolute(
           @window,
-          left + point[0] * BLOCK_SIDE, top + point[1] * BLOCK_SIDE,
+          Point.new( left + point[0] * BLOCK_SIDE, top + point[1] * BLOCK_SIDE ),
           @colour )
       end
     end

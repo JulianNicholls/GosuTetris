@@ -2,11 +2,35 @@
 
 require 'gosu'
 
+# Hold a (x, y) pixel position, and allows for offsetting
+
+class Point < Struct.new( :x, :y )
+  def offset( by_x, by_y )
+    Point.new( x + by_x, y + by_y )
+  end
+end
+
+# Hold a 2-diemnsional size and allow for inflation / deflation
+
+class Size < Struct.new( :width, :height )
+  def inflate( by_width, by_height )
+    Size.new( width + by_width, height + by_height )
+  end
+
+  def inflate!( by_width, by_height )
+    @width  += by_width
+    @height += by_height
+  end
+end
+
 # Add a draw_rectangle() to Gosu which simplifies drawing a simple rectangle
 # in one colour
 
 class Gosu::Window
-  def draw_rectangle( left, top, width, height, z_index, colour )
+  def draw_rectangle( point, size, z_index, colour )
+    left, top     = point.x, point.y
+    width, height = size.width, size.height
+
     draw_quad(
       left, top, colour,
       left + width - 1, top, colour,
@@ -21,6 +45,6 @@ end
 
 class Gosu::Font
   def measure( text )
-    [text_width( text, 1 ), height]
+    Size.new( text_width( text, 1 ), height )
   end
 end

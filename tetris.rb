@@ -79,14 +79,17 @@ module Tetris
     end
 
     def draw_background
-      draw_rectangle( 0, 0, WELL_BORDER, HEIGHT, 0, BACKGROUND )
-      draw_rectangle( 9, HEIGHT - WELL_BORDER, WIDTH, WELL_BORDER, 0, BACKGROUND )
-      draw_rectangle( WELL_BORDER + COLUMNS * BLOCK_SIDE, 0,
-                      PANEL_WIDTH, HEIGHT, 0,
-                      BACKGROUND )
+      draw_rectangle( Point.new( 0, 0 ), Size.new( WELL_BORDER, HEIGHT ),
+                      0, BACKGROUND )
+      draw_rectangle( Point.new( 9, HEIGHT - WELL_BORDER ),
+                      Size.new( WIDTH, WELL_BORDER ), 0, BACKGROUND )
 
-      draw_rectangle( NEXT_LEFT, NEXT_TOP, NEXT_WIDTH, NEXT_HEIGHT, 0,
-                      Gosu::Color::BLACK )
+      draw_rectangle( Point.new( WELL_BORDER + COLUMNS * BLOCK_SIDE, 0 ),
+                      Size.new( PANEL_WIDTH, HEIGHT ), 0, BACKGROUND )
+
+      draw_rectangle( Point.new( NEXT_LEFT, NEXT_TOP ),
+                      Size.new( NEXT_WIDTH, NEXT_HEIGHT ),
+                      0, Gosu::Color::BLACK )
 
       draw_grid
     end
@@ -95,11 +98,13 @@ module Tetris
       (WELL_BORDER + BLOCK_SIDE)
         .step( WELL_BORDER + (COLUMNS - 1) * BLOCK_SIDE, BLOCK_SIDE )
         .each do |l|
-        draw_rectangle( l, 0, 2, HEIGHT - WELL_BORDER, 0, GRID )
+        draw_rectangle( Point.new( l, 0 ), Size.new( 2, HEIGHT - WELL_BORDER ),
+                        0, GRID )
       end
 
       0.step( HEIGHT - (WELL_BORDER + 1), BLOCK_SIDE ).each do |t|
-        draw_rectangle( WELL_BORDER, t, COLUMNS * BLOCK_SIDE, 2, 0, GRID )
+        draw_rectangle( Point.new( WELL_BORDER, t ),
+                        Size.new( COLUMNS * BLOCK_SIDE, 2 ), 0, GRID )
       end
     end
 
@@ -109,13 +114,15 @@ module Tetris
     end
 
     def draw_paused
-      draw_rectangle( 60, 110, WIDTH - 120, HEIGHT - 220, 10, 0x60000000 )
+      draw_rectangle( Point.new( 60, 110 ), Size.new( WIDTH - 120, HEIGHT - 220 ),
+                      10, 0x60000000 )
       p     = 'PAUSED'
       font  = @fonts[:pause]
 
-      width, height = font.measure( p )
+      size = font.measure( p )
 
-      font.draw( p, (WIDTH - width) / 2, (HEIGHT - height) / 2, 10, 1, 1, BLUE )
+      font.draw( p, (WIDTH - size.width) / 2, (HEIGHT - size.height) / 2, 10,
+                 1, 1, BLUE )
     end
 
     def button_down( btn_id )

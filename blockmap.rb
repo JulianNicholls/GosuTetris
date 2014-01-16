@@ -55,7 +55,10 @@ module Tetris
     def draw( window )
       @blocks.each_with_index do |columns, ridx|
         columns.each_with_index do |colour, cidx|
-          Block.draw( window, ridx, cidx, colour ) unless colour == 0
+          unless colour == 0
+            gpoint = GridPoint.new( ridx, cidx )
+            Block.draw( window, gpoint, colour )
+          end
         end
       end
     end
