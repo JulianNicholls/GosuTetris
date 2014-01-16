@@ -8,6 +8,15 @@ class Point < Struct.new( :x, :y )
   def offset( by_x, by_y )
     Point.new( x + by_x, y + by_y )
   end
+
+  def move_by!( by_x, by_y)
+    self.x += by_x
+    self.y += by_y
+  end
+
+  def move_to!( new_x, new_y)
+    self.x, self.y = new_x, new_y
+  end
 end
 
 # Hold a 2-diemnsional size and allow for inflation / deflation
@@ -18,8 +27,8 @@ class Size < Struct.new( :width, :height )
   end
 
   def inflate!( by_width, by_height )
-    @width  += by_width
-    @height += by_height
+    self.width  += by_width
+    self.height += by_height
   end
 end
 

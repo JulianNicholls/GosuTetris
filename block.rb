@@ -15,6 +15,11 @@ module Tetris
     def to_point
       Point.new( WELL_BORDER + column * BLOCK_SIDE, row * BLOCK_SIDE )
     end
+
+    def move_by!( by_row, by_column )
+      self.row    += by_row
+      self.column += by_column
+    end
   end
 
   # Draw a constituent block of a Tetris shape.
@@ -34,8 +39,8 @@ module Tetris
       size  = Size.new( BLOCK_SIDE, BLOCK_SIDE )
       window.draw_rectangle( point, size, 1, Gosu::Color::WHITE )
 
-      window.draw_rectangle( point.offset( 1, 1 ),
-                             size.inflate( -2, -2 ), 1, colour )
+      size.inflate!( -2, -2 )
+      window.draw_rectangle( point.offset( 1, 1 ), size, 1, colour )
     end
   end
 end

@@ -8,15 +8,13 @@ module Tetris
   class Shape
     include Constants
 
-    attr_reader :left, :top
-
     @prev_colour = -1
 
     def initialize( window )
       @window = window
       @colour = Shape.colour  # Random Colour
       @orient = 0
-      @left, @top = 3, 0
+      @origin = GridPoint.new( 0, 3 )
     end
 
     def self.next( window )
@@ -47,17 +45,17 @@ module Tetris
 
     def down( stack )
       ok = downable?( stack )
-      @top += 1 if ok
+      @origin.move_by!( 1, 0 ) if ok
 
       ok    # Return whether we moved so that we know when the bottom is reached
     end
 
     def right( stack )
-      @left += 1 if rightable?( stack )
+      @origin.move_by!( 0, 1 ) if rightable?( stack )
     end
 
     def left( stack )
-      @left -= 1 if leftable?( stack )
+      @origin.move_by!( 0, -1 ) if leftable?( stack )
     end
 
     def width
@@ -67,8 +65,8 @@ module Tetris
     def blocks
       @map[@orient].map do |point|
         {
-          row:    @top + point[1],
-          column: @left + point[0],
+          row:    @origin.row + point[1],
+          column: @origin.column + point[0],
           colour: @colour
         }
       end
@@ -76,19 +74,16 @@ module Tetris
 
     def draw
       @map[@orient].each do |point|
-        Block.draw( @window,
-                    GridPoint.new( @top + point[1], @left + point[0] ),
-                    @colour )
+        Block.draw( @window, @origin.offset( point[1], point[0] ), @colour )
       end
     end
 
     # Draw at a specific place in the default orientation
 
-    def draw_absolute( left, top )
+    def draw_absolute( origin )
       @map[0].each do |point|
         Block.draw_absolute(
-          @window,
-          Point.new( left + point[0] * BLOCK_SIDE, top + point[1] * BLOCK_SIDE ),
+          @window, origin.offset( point[0] * BLOCK_SIDE, point[1] * BLOCK_SIDE ),
           @colour )
       end
     end
@@ -97,19 +92,19 @@ module Tetris
 
     def rightable?( stack )
       @map[@orient].all? do |point|
-        stack.empty?( point[1] + @top, point[0] + @left + 1 )
+        stack.empty?( point[1] + @origin.row, point[0] + @origin.column + 1 )
       end
     end
 
     def leftable?( stack )
       @map[@orient].all? do |point|
-        stack.empty?( point[1] + @top, point[0] + @left - 1  )
+        stack.empty?( point[1] + @origin.row, point[0] + @origin.column - 1  )
       end
     end
 
     def downable?( stack )
       @map[@orient].all? do |point|
-        stack.empty?( point[1] + @top + 1, point[0] + @left )
+        stack.empty?( point[1] + @origin.row + 1, point[0] + @origin.column )
       end
     end
   end

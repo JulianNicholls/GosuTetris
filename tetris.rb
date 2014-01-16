@@ -72,7 +72,9 @@ module Tetris
       draw_score
       @stack.draw( self )
       @cur.draw
-      @next.draw_absolute( NEXT_LEFT + BLOCK_SIDE, NEXT_TOP + BLOCK_SIDE )
+      @next.draw_absolute(
+        Point.new( NEXT_LEFT + BLOCK_SIDE, NEXT_TOP + BLOCK_SIDE )
+      )
 
       draw_paused     if @paused && !@game_over
       draw_game_over  if @game_over
