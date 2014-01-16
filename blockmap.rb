@@ -27,6 +27,12 @@ module Tetris
       blocks.each { |b| @blocks[b[:row]][b[:column]] = b[:colour] }
     end
 
+    def game_over?
+      # Check for completion, i.e. Are there blocks in top row.
+
+      !@blocks[0].all? { |colour| colour == 0 }
+    end
+
     # Check for complete lines from the bottom to the top
 
     def complete_lines
