@@ -6,6 +6,8 @@ require './resources'
 require './shapes'
 require './blockmap'
 require './block'
+require './pausewindow'
+require './gameover'
 
 module Tetris
   # Tetris Game
@@ -73,8 +75,7 @@ module Tetris
       @stack.draw( self )
       @cur.draw
       @next.draw_absolute(
-        Point.new( NEXT_LEFT + BLOCK_SIDE, NEXT_TOP + BLOCK_SIDE )
-      )
+        Point.new( NEXT_LEFT + BLOCK_SIDE, NEXT_TOP + BLOCK_SIDE ) )
 
       draw_paused     if @paused && !@game_over
       draw_game_over  if @game_over
@@ -83,6 +84,7 @@ module Tetris
     def draw_background
       draw_rectangle( Point.new( 0, 0 ), Size.new( WELL_BORDER, HEIGHT ),
                       0, BACKGROUND )
+
       draw_rectangle( Point.new( 9, HEIGHT - WELL_BORDER ),
                       Size.new( WIDTH, WELL_BORDER ), 0, BACKGROUND )
 
@@ -97,16 +99,17 @@ module Tetris
     end
 
     def draw_grid
+      size = Size.new( 2, HEIGHT - WELL_BORDER )
+
       (WELL_BORDER + BLOCK_SIDE)
-        .step( WELL_BORDER + (COLUMNS - 1) * BLOCK_SIDE, BLOCK_SIDE )
-        .each do |l|
-        draw_rectangle( Point.new( l, 0 ), Size.new( 2, HEIGHT - WELL_BORDER ),
-                        0, GRID )
+        .step( WELL_BORDER + (COLUMNS - 1) * BLOCK_SIDE, BLOCK_SIDE ).each do |l|
+        draw_rectangle( Point.new( l, 0 ), size, 0, GRID )
       end
 
+      size = Size.new( COLUMNS * BLOCK_SIDE, 2 )
+
       0.step( HEIGHT - (WELL_BORDER + 1), BLOCK_SIDE ).each do |t|
-        draw_rectangle( Point.new( WELL_BORDER, t ),
-                        Size.new( COLUMNS * BLOCK_SIDE, 2 ), 0, GRID )
+        draw_rectangle( Point.new( WELL_BORDER, t ), size, 0, GRID )
       end
     end
 
@@ -116,15 +119,11 @@ module Tetris
     end
 
     def draw_paused
-      draw_rectangle( Point.new( 60, 110 ), Size.new( WIDTH - 120, HEIGHT - 220 ),
-                      10, 0x60000000 )
-      p     = 'PAUSED'
-      font  = @fonts[:pause]
+      PauseWindow.new( self ).draw
+    end
 
-      size = font.measure( p )
-
-      font.draw( p, (WIDTH - size.width) / 2, (HEIGHT - size.height) / 2, 10,
-                 1, 1, BLUE )
+    def draw_game_over
+      GameOverWindow.new( self ).draw
     end
 
     def button_down( btn_id )
