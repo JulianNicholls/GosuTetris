@@ -35,23 +35,26 @@ module Tetris
     end
 
     def reset
-      @lines = 0
+      @lines        = 0
       @cur, @next   = Shape.next( self ), Shape.next( self )
       @down_time    = 0
       @stack        = BlockMap.new
       @down_pressed = false
       @level        = 7     # Slow to begin with
       @paused       = false
+      @game_over    = false
     end
 
     def update
-      unless @paused
+      unless @paused || @game_over
         @down_time = (@down_time + 1) % @level
 
         update_block_down if @down_time == 0 || @down_pressed
 
         @down_pressed = false
       end
+
+      @game_over = @stack.game_over?
     end
 
     def update_block_down
@@ -71,7 +74,8 @@ module Tetris
       @cur.draw
       @next.draw_absolute( NEXT_LEFT + BLOCK_SIDE, NEXT_TOP + BLOCK_SIDE )
 
-      draw_paused if @paused
+      draw_paused     if @paused && !@game_over
+      draw_game_over  if @game_over
     end
 
     def draw_background
