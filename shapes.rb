@@ -65,8 +65,7 @@ module Tetris
     def blocks
       @map[@orient].map do |point|
         {
-          row:    @origin.row + point[1],
-          column: @origin.column + point[0],
+          gpoint: @origin.offset( point[1], point[0] ),
           colour: @colour
         }
       end
@@ -92,19 +91,19 @@ module Tetris
 
     def rightable?( stack )
       @map[@orient].all? do |point|
-        stack.empty?( point[1] + @origin.row, point[0] + @origin.column + 1 )
+        stack.empty?( @origin.offset( point[1], point[0] + 1 ) )
       end
     end
 
     def leftable?( stack )
       @map[@orient].all? do |point|
-        stack.empty?( point[1] + @origin.row, point[0] + @origin.column - 1  )
+        stack.empty?( @origin.offset( point[1], point[0] - 1 ) )
       end
     end
 
     def downable?( stack )
       @map[@orient].all? do |point|
-        stack.empty?( point[1] + @origin.row + 1, point[0] + @origin.column )
+        stack.empty?( @origin.offset( point[1] + 1, point[0] ) )
       end
     end
   end

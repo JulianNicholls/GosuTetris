@@ -10,21 +10,21 @@ module Tetris
       @blocks = Array.new( ROWS ) { |idx| Array.new( COLUMNS, 0 ) }
     end
 
-    def at( row, column )
-      fail 'Invalid Row'    unless row.between?( 0, ROWS - 1 )
-      fail 'Invalid Column' unless column.between?( 0, COLUMNS - 1 )
+    def at( gpoint )
+      fail 'Invalid Row'    unless gpoint.row.between?( 0, ROWS - 1 )
+      fail 'Invalid Column' unless gpoint.column.between?( 0, COLUMNS - 1 )
 
-      @blocks[row][column]
+      @blocks[gpoint.row][gpoint.column]
     end
 
-    def empty?( row, column )
-      row < ROWS &&
-      column.between?( 0, COLUMNS - 1 ) &&
-      at( row, column ) == 0
+    def empty?( gpoint )
+      gpoint.row < ROWS &&
+      gpoint.column.between?( 0, COLUMNS - 1 ) &&
+      at( gpoint ) == 0
     end
 
     def add( blocks )
-      blocks.each { |b| @blocks[b[:row]][b[:column]] = b[:colour] }
+      blocks.each { |b| @blocks[b[:gpoint].row][b[:gpoint].column] = b[:colour] }
     end
 
     def game_over?
