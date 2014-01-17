@@ -42,9 +42,9 @@ class Gosu::Window
 
     draw_quad(
       left, top, colour,
-      left + width - 1, top, colour,
-      left + width - 1, top + height - 1, colour,
-      left, top + height - 1, colour,
+      left + width, top, colour,
+      left + width, top + height, colour,
+      left, top + height, colour,
       z_index
     )
   end
