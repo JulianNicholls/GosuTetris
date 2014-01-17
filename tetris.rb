@@ -74,11 +74,9 @@ module Tetris
       draw_score
       @stack.draw( self )
       @cur.draw
-      @next.draw_absolute(
-        Point.new( NEXT_LEFT + BLOCK_SIDE, NEXT_TOP + BLOCK_SIDE ) )
+      @next.draw_absolute( Point.new( NEXT_LEFT + BLOCK_SIDE, NEXT_TOP + BLOCK_SIDE ) )
 
-      draw_paused     if @paused && !@game_over
-      draw_game_over  if @game_over
+      draw_overlays
     end
 
     def draw_background
@@ -118,12 +116,12 @@ module Tetris
                            1, 1, Gosu::Color::WHITE )
     end
 
-    def draw_paused
-      PauseWindow.new( self ).draw
-    end
-
-    def draw_game_over
-      GameOverWindow.new( self ).draw
+    def draw_overlays
+      if @game_over
+        GameOverWindow.new( self ).draw
+      elsif @paused
+        PauseWindow.new( self ).draw
+      end
     end
 
     def button_down( btn_id )

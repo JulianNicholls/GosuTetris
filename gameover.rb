@@ -3,7 +3,7 @@ require './gosu_enhanced'
 require './overlaywindow.rb'
 
 module Tetris
-  # Show the window when the game is paused
+  # Show the window when the game is over
 
   class GameOverWindow < OverlayWindow
     include Constants
@@ -17,7 +17,7 @@ module Tetris
       @window.draw_rectangle(
         Point.new( P_LEFT, P_TOP ), Size.new( P_WIDTH, P_HEIGHT ), 10, 0x20ffffff )
 
-      say( 'GAME OVER', @fonts[:pause], :center, P_TOP + P_HEIGHT/ 4, BLUE )
+      say( 'GAME OVER', @fonts[:pause], :center, P_TOP + P_HEIGHT / 4, BLUE )
       say( 'Press R to Restart', @fonts[:score],
            :center, P_TOP + P_HEIGHT * 3 / 5, BLUE )
       say( 'Press Escape to Exit', @fonts[:score],

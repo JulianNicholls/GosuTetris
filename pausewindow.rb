@@ -17,7 +17,7 @@ module Tetris
       @window.draw_rectangle(
         Point.new( P_LEFT, P_TOP ), Size.new( P_WIDTH, P_HEIGHT ), 10, 0x20ffffff )
 
-      say( 'PAUSED', @fonts[:pause], :center, P_TOP + P_HEIGHT/ 4, BLUE )
+      say( 'PAUSED', @fonts[:pause], :center, P_TOP + P_HEIGHT / 4, BLUE )
       say( 'Press P to Continue', @fonts[:score],
            :center, P_TOP + P_HEIGHT * 3 / 5, BLUE )
     end
