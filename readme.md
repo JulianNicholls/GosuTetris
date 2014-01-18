@@ -5,13 +5,17 @@ There's not a lot to say... It's Tetris done with the Ruby
 
 ## Updated in this version
 
-Moving left and right ensure that it is possible first now.
+Detection of the game being over because there is a block in the top row and
+an ensuing dialog.
+
+The game background is now a static graphic due to my Mac being fixed, Yay!
 
 ## TODO
 
-Check for the game being finished because there is a block in the top row.
+Check for rotation being possible before doing it.
 
-Dialog after completion.
+Rotation around a point that isn't the top-left corner for some rotations
+for some shapes.
 
 ## Controls
 

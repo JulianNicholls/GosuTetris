@@ -33,33 +33,37 @@ module Tetris
     def self.colour
       colour = rand( 0..5 )
 
-      colour = rand( 0..5 ) while colour == @prev_colour
+      colour = (colour + 1) % 6 if colour == @prev_colour
       @prev_colour = colour
 
       [RED, GREEN, BLUE, PURPLE, AQUA, YELLOW][colour]
     end
 
     def rotate
-      @orient = (@orient + 1) % @map.size
+      @orient = (@orient + 1) % @map.size if rotatable?
     end
 
-    def down( stack )
-      ok = downable?( stack )
+    def down
+      ok = downable?
       @origin.move_by!( 1, 0 ) if ok
 
       ok    # Return whether we moved so that we know when the bottom is reached
     end
 
-    def right( stack )
-      @origin.move_by!( 0, 1 ) if rightable?( stack )
+    def right
+      @origin.move_by!( 0, 1 ) if rightable?
     end
 
-    def left( stack )
-      @origin.move_by!( 0, -1 ) if leftable?( stack )
+    def left
+      @origin.move_by!( 0, -1 ) if leftable?
     end
 
     def width
       @map[@orient].map { |p| p[0] }.max + 1
+    end
+
+    def height
+      @map[@orient].map { |p| p[1] }.max + 1
     end
 
     def blocks
@@ -87,23 +91,33 @@ module Tetris
       end
     end
 
-    protected
+    private
 
-    def rightable?( stack )
+    def rightable?
+      stack = @window.stack
       @map[@orient].all? do |point|
         stack.empty?( @origin.offset( point[1], point[0] + 1 ) )
       end
     end
 
-    def leftable?( stack )
+    def leftable?
+      stack = @window.stack
       @map[@orient].all? do |point|
         stack.empty?( @origin.offset( point[1], point[0] - 1 ) )
       end
     end
 
-    def downable?( stack )
+    def downable?
+      stack = @window.stack
       @map[@orient].all? do |point|
         stack.empty?( @origin.offset( point[1] + 1, point[0] ) )
+      end
+    end
+
+    def rotatable?
+      stack = @window.stack
+      @map[(@orient + 1) % @map.size].all? do |point|
+        stack.empty?( @origin.offset( point[1], point[0] ) )
       end
     end
   end

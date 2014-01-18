@@ -15,35 +15,38 @@ module Tetris
   class Game < Gosu::Window
     include Constants
 
-    KEY_FUNCS = {
-      Gosu::KbEscape   =>  :close,
-      Gosu::KbR        =>  :reset,
-      Gosu::KbP        =>  :toggle_paused,
+    attr_reader :stack
 
-      Gosu::KbDown     =>  :user_pressed_down,
-      Gosu::KbLeft     =>  :move_left,
-      Gosu::KbRight    =>  :move_right,
-      Gosu::KbUp       =>  :rotate
+    KEY_FUNCS = {
+      Gosu::KbEscape =>  :close,
+      Gosu::KbR      =>  :reset,
+      Gosu::KbP      =>  :toggle_paused,
+
+      Gosu::KbDown   =>  :user_pressed_down,
+      Gosu::KbLeft   =>  :move_left,
+      Gosu::KbRight  =>  :move_right,
+      Gosu::KbUp     =>  :rotate
     }
 
-    def initialize
+    def initialize( debug )
       super( WIDTH, HEIGHT, false, 100 )
 
       self.caption = 'Gosu Tetris'
 
       @fonts  = ResourceLoader.fonts( self )
-      @images = ResourceLoader.images( self ) 
+      @images = ResourceLoader.images( self )
+      @debug  = debug
 
       reset
     end
 
     def reset
       @lines        = 0
-      @cur, @next   = Shape.next( self ), Shape.next( self )
       @down_time    = 0
       @stack        = BlockMap.new
+      @cur, @next   = Shape.next( self ), Shape.next( self )
       @down_pressed = false
-      @level        = 7     # Slow to begin with
+      @level        = 6     # Slow to begin with
       @paused       = false
       @game_over    = false
     end
@@ -52,7 +55,7 @@ module Tetris
       unless @paused || @game_over
         @down_time = (@down_time + 1) % @level
 
-        update_block_down if @down_time == 0 || @down_pressed
+        update_block_down if (@down_time == 0 && !@debug) || @down_pressed
 
         @down_pressed = false
       end
@@ -61,10 +64,10 @@ module Tetris
     end
 
     def update_block_down
-      unless @cur.down( @stack )   # Reached bottom or a block in the way
+      unless @cur.down       # Reached bottom or a block in the way
         @stack.add( @cur.blocks )
         @lines += @stack.complete_lines
-        @level  = [2, 7 - @lines / 10].max   # Speed up
+        @level  = [2, 6 - @lines / 10].max   # Speed up
         @cur    = @next
         @next   = Shape.next( self )
       end
@@ -75,7 +78,9 @@ module Tetris
       draw_score
       @stack.draw( self )
       @cur.draw
-      @next.draw_absolute( Point.new( NEXT_LEFT + BLOCK_SIDE, NEXT_TOP + BLOCK_SIDE ) )
+      @next.draw_absolute(
+        Point.new( NEXT_LEFT + BLOCK_SIDE, NEXT_TOP + BLOCK_SIDE )
+      )
 
       draw_overlays
     end
@@ -101,7 +106,7 @@ module Tetris
       send( KEY_FUNCS[btn_id] ) if KEY_FUNCS.key? btn_id
     end
 
-    protected
+    private
 
     def toggle_paused
       @paused = !@paused
@@ -112,11 +117,11 @@ module Tetris
     end
 
     def move_left
-      @cur.left( @stack )
+      @cur.left
     end
 
     def move_right
-      @cur.right( @stack )
+      @cur.right
     end
 
     def rotate
@@ -125,5 +130,8 @@ module Tetris
   end
 end
 
-window = Tetris::Game.new
+debug = ARGV.first == '--debug'
+puts 'Debug Mode' if debug
+
+window = Tetris::Game.new( debug )
 window.show
