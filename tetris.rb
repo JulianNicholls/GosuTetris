@@ -31,7 +31,8 @@ module Tetris
 
       self.caption = 'Gosu Tetris'
 
-      @fonts = ResourceLoader.fonts( self )
+      @fonts  = ResourceLoader.fonts( self )
+      @images = ResourceLoader.images( self ) 
 
       reset
     end
@@ -82,35 +83,7 @@ module Tetris
     end
 
     def draw_background
-      draw_rectangle( Point.new( 0, 0 ), Size.new( WELL_BORDER, HEIGHT ),
-                      0, BACKGROUND )
-
-      draw_rectangle( Point.new( 9, HEIGHT - WELL_BORDER ),
-                      Size.new( WIDTH, WELL_BORDER ), 0, BACKGROUND )
-
-      draw_rectangle( Point.new( WELL_BORDER + COLUMNS * BLOCK_SIDE, 0 ),
-                      Size.new( PANEL_WIDTH, HEIGHT ), 0, BACKGROUND )
-
-      draw_rectangle( Point.new( NEXT_LEFT, NEXT_TOP ),
-                      Size.new( NEXT_WIDTH, NEXT_HEIGHT ),
-                      0, Gosu::Color::BLACK )
-
-      draw_grid
-    end
-
-    def draw_grid
-      size = Size.new( 2, HEIGHT - WELL_BORDER )
-
-      (WELL_BORDER + BLOCK_SIDE)
-        .step( WELL_BORDER + (COLUMNS - 1) * BLOCK_SIDE, BLOCK_SIDE ).each do |l|
-        draw_rectangle( Point.new( l, 0 ), size, 0, GRID )
-      end
-
-      size = Size.new( COLUMNS * BLOCK_SIDE, 2 )
-
-      0.step( HEIGHT - (WELL_BORDER + 1), BLOCK_SIDE ).each do |t|
-        draw_rectangle( Point.new( WELL_BORDER, t ), size, 0, GRID )
-      end
+      @images[:background].draw( 0, 0, 0 )
     end
 
     def draw_score
