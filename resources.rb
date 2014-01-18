@@ -10,5 +10,11 @@ module Tetris
         pause:    Gosu::Font.new( window, 'Arial', 56 )
       }
     end
+    
+    def self.images( window )
+      {
+        background:   Gosu::Image.new( window, 'media/background.png', true )
+      }
+    end
   end
 end
