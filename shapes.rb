@@ -47,6 +47,10 @@ module Tetris
       ok = downable?
       @origin.move_by!( 1, 0 ) if ok
 
+      # We've moved, but are we now at the bottom?
+
+      @window.sounds[:drop].play if ok && !downable?
+
       ok    # Return whether we moved so that we know when the bottom is reached
     end
 
@@ -81,12 +85,12 @@ module Tetris
       end
     end
 
-    # Draw at a specific place in the default orientation
+    # Draw at a specific pixel position in the default orientation
 
-    def draw_absolute( origin )
+    def draw_absolute( porigin )
       @map[0].each do |point|
         Block.draw_absolute(
-          @window, origin.offset( point[0] * BLOCK_SIDE, point[1] * BLOCK_SIDE ),
+          @window, porigin.offset( point[0] * BLOCK_SIDE, point[1] * BLOCK_SIDE ),
           @colour )
       end
     end

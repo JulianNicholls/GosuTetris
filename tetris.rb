@@ -15,7 +15,7 @@ module Tetris
   class Game < Gosu::Window
     include Constants
 
-    attr_reader :stack
+    attr_reader :stack, :sounds
 
     KEY_FUNCS = {
       Gosu::KbEscape =>  :close,
@@ -35,6 +35,7 @@ module Tetris
 
       @fonts  = ResourceLoader.fonts( self )
       @images = ResourceLoader.images( self )
+      @sounds = ResourceLoader.sounds( self )
       @debug  = debug
 
       reset
@@ -66,10 +67,15 @@ module Tetris
     def update_block_down
       unless @cur.down       # Reached bottom or a block in the way
         @stack.add( @cur.blocks )
-        @lines += @stack.complete_lines
-        @level  = [2, 6 - @lines / 10].max   # Speed up
-        @cur    = @next
-        @next   = Shape.next( self )
+
+        clines = @stack.complete_lines
+        unless clines == 0
+          @sounds[:smash].play
+          @lines += clines
+        end
+
+        @level      = [2, 6 - @lines / 10].max   # Speed up
+        @cur, @next = @next, Shape.next( self )
       end
     end
 
@@ -78,9 +84,7 @@ module Tetris
       draw_score
       @stack.draw( self )
       @cur.draw
-      @next.draw_absolute(
-        Point.new( NEXT_LEFT + BLOCK_SIDE, NEXT_TOP + BLOCK_SIDE )
-      )
+      @next.draw_absolute( NEXT.offset( BLOCK_SIDE, BLOCK_SIDE ) )
 
       draw_overlays
     end

@@ -16,5 +16,12 @@ module Tetris
         background:   Gosu::Image.new( window, 'media/background.png', true )
       }
     end
+
+    def self.sounds( window )
+      {
+        drop:   Gosu::Sample.new( window, 'media/Gavel.wav' ),
+        smash:  Gosu::Sample.new( window, 'media/Smash.wav' )
+      }
+    end
   end
 end
