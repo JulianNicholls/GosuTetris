@@ -8,20 +8,20 @@ module Tetris
   class GameOverWindow < OverlayWindow
     include Constants
 
-    P_TOP     = 110
-    P_LEFT    = 60
-    P_WIDTH   = WIDTH  - (P_LEFT * 2)
-    P_HEIGHT  = HEIGHT - (P_TOP * 2)
+    P_ORIGIN  = Point.new( 60, 110 )
+    P_SIZE    = Size.new( WIDTH - (P_ORIGIN.x * 2), HEIGHT - (P_ORIGIN.y * 2) )
 
     def draw
-      @window.draw_rectangle(
-        Point.new( P_LEFT, P_TOP ), Size.new( P_WIDTH, P_HEIGHT ), 10, 0xc0ffffff )
+      @window.draw_rectangle( P_ORIGIN, P_SIZE, 10, 0xc0ffffff )
 
-      say( 'GAME OVER', @fonts[:pause], :center, P_TOP + P_HEIGHT / 4, BLUE )
+      say( 'GAME OVER', @fonts[:pause],
+           :center, P_ORIGIN.y + P_SIZE.height / 4, BLUE )
+
       say( 'Press R to Restart', @fonts[:score],
-           :center, P_TOP + P_HEIGHT * 3 / 5, BLUE )
+           :center, P_ORIGIN.y + P_SIZE.height * 3 / 5, BLUE )
+
       say( 'Press Escape to Exit', @fonts[:score],
-           :center, P_TOP + P_HEIGHT * 4 / 5, BLUE )
+           :center, P_ORIGIN.y + P_SIZE.height * 4 / 5, BLUE )
     end
   end
 end

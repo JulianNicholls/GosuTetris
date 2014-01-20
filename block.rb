@@ -3,7 +3,7 @@
 require './constants'
 
 module Tetris
-  # Hold a (row, column) position insiode the Tetris Well
+  # Hold a (row, column) position inside the Tetris Well
 
   class GridPoint < Struct.new( :row, :column )
     include Constants

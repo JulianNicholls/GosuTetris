@@ -2,7 +2,7 @@
 
 require 'gosu'
 
-# Hold a (x, y) pixel position, and allows for offsetting
+# Hold a (x, y) pixel position, and allow for offsetting and movement
 
 class Point < Struct.new( :x, :y )
   def offset( by_x, by_y )
@@ -14,8 +14,12 @@ class Point < Struct.new( :x, :y )
     self.y += by_y
   end
 
-  def move_to!( new_x, new_y)
-    self.x, self.y = new_x, new_y
+  def move_to!( new_x, new_y = nil )
+    if new_x.is_a? Point
+      self.x, self.y = new_x.x, new_x.y
+    else
+      self.x, self.y = new_x, new_y
+    end
   end
 end
 
