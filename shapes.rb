@@ -45,11 +45,13 @@ module Tetris
 
     def down
       ok = downable?
-      @origin.move_by!( 1, 0 ) if ok
 
-      # We've moved, but are we now at the bottom?
+      # If we can move, but are now at the bottom then make a noise
 
-      @window.sounds[:drop].play if ok && !downable?
+      if ok
+        @origin.move_by!( 1, 0 )
+        @window.sounds[:drop].play if !downable?
+      end
 
       ok    # Return whether we moved so that we know when the bottom is reached
     end

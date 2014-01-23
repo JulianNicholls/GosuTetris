@@ -68,11 +68,7 @@ module Tetris
       unless @cur.down       # Reached bottom or a block in the way
         @stack.add( @cur.blocks )
 
-        clines = @stack.complete_lines
-        unless clines == 0
-          @sounds[:smash].play
-          @lines += clines
-        end
+        @lines += @stack.complete_lines( @sounds[:smash] )
 
         @level      = [2, 6 - @lines / 10].max   # Speed up
         @cur, @next = @next, Shape.next( self )
@@ -107,11 +103,8 @@ module Tetris
     end
 
     def button_down( btn_id )
-      instance_exec &KEY_FUNCS[btn_id]
+      instance_exec( &KEY_FUNCS[btn_id] )
     end
-
-    private
-
   end
 end
 

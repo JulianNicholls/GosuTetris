@@ -35,7 +35,7 @@ module Tetris
 
     # Check for complete lines from the bottom to the top
 
-    def complete_lines
+    def complete_lines( noise )
       row, lines_removed = ROWS - 1, 0
 
       loop do
@@ -43,6 +43,7 @@ module Tetris
           break if (row -= 1) < 1
         else
           remove_line( row )
+          noise.play
           lines_removed += 1
         end
       end
