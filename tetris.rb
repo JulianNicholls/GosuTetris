@@ -18,14 +18,14 @@ module Tetris
     attr_reader :stack, :sounds
 
     KEY_FUNCS = {
-      Gosu::KbEscape =>  :close,
-      Gosu::KbR      =>  :reset,
-      Gosu::KbP      =>  :toggle_paused,
+      Gosu::KbEscape =>  -> { close },
+      Gosu::KbR      =>  -> { reset },
+      Gosu::KbP      =>  -> { @paused = !@paused },
 
-      Gosu::KbDown   =>  :user_pressed_down,
-      Gosu::KbLeft   =>  :move_left,
-      Gosu::KbRight  =>  :move_right,
-      Gosu::KbUp     =>  :rotate
+      Gosu::KbDown   =>  -> { @down_pressed = true },
+      Gosu::KbLeft   =>  -> { @cur.left },
+      Gosu::KbRight  =>  -> { @cur.right },
+      Gosu::KbUp     =>  -> { @cur.rotate }
     }
 
     def initialize( debug )
@@ -107,30 +107,11 @@ module Tetris
     end
 
     def button_down( btn_id )
-      send( KEY_FUNCS[btn_id] ) if KEY_FUNCS.key? btn_id
+      instance_exec &KEY_FUNCS[btn_id]
     end
 
     private
 
-    def toggle_paused
-      @paused = !@paused
-    end
-
-    def user_pressed_down
-      @down_pressed = true
-    end
-
-    def move_left
-      @cur.left
-    end
-
-    def move_right
-      @cur.right
-    end
-
-    def rotate
-      @cur.rotate
-    end
   end
 end
 
