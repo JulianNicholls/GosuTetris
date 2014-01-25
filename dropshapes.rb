@@ -69,7 +69,7 @@ module Tetris
     end
   end
   
-  # A left snake
+  # A left snake / stair
 
   class LeftSnake < Shape
     def initialize( window )
@@ -82,7 +82,7 @@ module Tetris
     end
   end
   
-  # A right snake
+  # A right snake / stair
 
   class RightSnake < Shape
     def initialize( window )

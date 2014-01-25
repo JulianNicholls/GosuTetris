@@ -5,14 +5,14 @@ There's not a lot to say... It's Tetris done with the Ruby
 
 ## Updated in this version
 
-Detection of the game being over because there is a block in the top row and
-an ensuing dialog.
+Added the two snake / stair shapes. I only realised that there was something 
+missing because I did a crossword with the clue 'Game played with 7 pieces'
+for Tetris and I thought 'Seven? I only have five, hmm...'. 
+Earlier, I looked at Tris on my iPhone and saw the missing pieces.
 
-The game background is now a static graphic due to my Mac being fixed, Yay!
+Potential rotation is checked before performing it now.
 
 ## TODO
-
-Check for rotation being possible before doing it.
 
 Rotation around a point that isn't the top-left corner for some rotations
 for some shapes.

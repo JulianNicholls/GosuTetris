@@ -1,5 +1,3 @@
-# Block
-
 require './constants'
 
 module Tetris

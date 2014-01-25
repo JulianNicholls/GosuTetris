@@ -95,11 +95,9 @@ module Tetris
     end
 
     def draw_overlays
-      if @game_over
-        GameOverWindow.new( self ).draw
-      elsif @paused
-        PauseWindow.new( self ).draw
-      end
+      GameOverWindow.new( self ).draw && return if @game_over
+        
+      PauseWindow.new( self ).draw if @paused
     end
 
     def button_down( btn_id )
