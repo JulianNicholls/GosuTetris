@@ -18,12 +18,14 @@ module Tetris
     end
 
     def self.next( window )
-      case rand( 1..5 )
+      case rand( 1..7 )
       when 1 then RightEll.new( window )
       when 2 then LeftEll.new( window )
       when 3 then Tee.new( window )
       when 4 then Bar.new( window )
       when 5 then Square.new( window )
+      when 6 then LeftSnake.new( window )
+      when 7 then RightSnake.new( window )
       end
     end
 
@@ -46,11 +48,11 @@ module Tetris
     def down
       ok = downable?
 
-      # If we can move, but are now at the bottom then make a noise
+      # If we can move, but are then at the bottom, make a noise
 
       if ok
         @origin.move_by!( 1, 0 )
-        @window.sounds[:drop].play if !downable?
+        @window.sounds[:drop].play unless downable?
       end
 
       ok    # Return whether we moved so that we know when the bottom is reached
