@@ -1,18 +1,14 @@
-# Shapes
-
 require './block'
+require './constants'
 
 module Tetris
-  # Base class for the four shapes
+  # Base class for the shapes
 
   class Shape
     include Constants
-
-    @prev_colour = -1
-
+    
     def initialize( window )
       @window = window
-      @colour = Shape.colour  # Random Colour
       @orient = 0
       @origin = GridPoint.new( 0, 3 )
     end
@@ -27,18 +23,6 @@ module Tetris
       when 6 then LeftSnake.new( window )
       when 7 then RightSnake.new( window )
       end
-    end
-
-    # Return a random colour, but a different one from the immediately
-    # previous one
-
-    def self.colour
-      colour = rand( 0..5 )
-
-      colour = (colour + 1) % 6 if colour == @prev_colour
-      @prev_colour = colour
-
-      [RED, GREEN, BLUE, PURPLE, AQUA, YELLOW][colour]
     end
 
     def rotate
