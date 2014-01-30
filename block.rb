@@ -27,15 +27,15 @@ module Tetris
 
     # Draw in the well, using a GridPoint
 
-    def self.draw( window, gridpoint, colour )
-      draw_absolute( window, gridpoint.to_point, colour )
+    def self.draw( window, gridpoint, colour, outer = Gosu::Color::WHITE )
+      draw_absolute( window, gridpoint.to_point, colour, outer )
     end
 
     # Draw at an absolute pixel position
 
-    def self.draw_absolute( window, point, colour )
+    def self.draw_absolute( window, point, colour, outer = Gosu::Color::WHITE )
       size  = Size.new( BLOCK_SIDE, BLOCK_SIDE )
-      window.draw_rectangle( point, size, 1, Gosu::Color::WHITE )
+      window.draw_rectangle( point, size, 1, outer ) unless outer == 0
 
       size.inflate!( -2, -2 )
       window.draw_rectangle( point.offset( 1, 1 ), size, 1, colour )

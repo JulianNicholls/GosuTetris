@@ -51,20 +51,20 @@ module Tetris
       lines_removed
     end
 
-    # Draw the occupied blocks
+    # Draw the occupied blocks, with no outer line.
 
     def draw( window )
       @blocks.each_with_index do |columns, ridx|
         columns.each_with_index do |colour, cidx|
           unless colour == 0
             gpoint = GridPoint.new( ridx, cidx )
-            Block.draw( window, gpoint, colour )
+            Block.draw( window, gpoint, colour, 0 )
           end
         end
       end
     end
 
-    protected
+    private
 
     # Remove a line, dropping down all the lines above
 
