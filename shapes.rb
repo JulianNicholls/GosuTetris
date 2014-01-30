@@ -86,31 +86,27 @@ module Tetris
     private
 
     def rightable?
-      stack = @window.stack
-      @map[@orient].all? do |point|
-        stack.empty?( @origin.offset( point[1], point[0] + 1 ) )
-      end
+      moveable?( 0, 1 )
     end
 
     def leftable?
-      stack = @window.stack
-      @map[@orient].all? do |point|
-        stack.empty?( @origin.offset( point[1], point[0] - 1 ) )
-      end
+      moveable?( 0, -1 )
     end
 
     def downable?
-      stack = @window.stack
-      @map[@orient].all? do |point|
-        stack.empty?( @origin.offset( point[1] + 1, point[0] ) )
-      end
+      moveable?( 1, 0 )
     end
 
     def rotatable?
+      moveable?( 0, 0, (@orient + 1) % @map.size )
+    end
+    
+    def moveable?( y_delta, x_delta, o_value = @orient )
       stack = @window.stack
-      @map[(@orient + 1) % @map.size].all? do |point|
-        stack.empty?( @origin.offset( point[1], point[0] ) )
+      @map[o_value].all? do |point|
+        stack.empty?( @origin.offset( point[1] + y_delta, point[0] + x_delta ) )
       end
+      
     end
   end
 end
