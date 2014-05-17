@@ -11,15 +11,14 @@ require './gameover'
 
 module Tetris
   # Tetris Game
-
   class Game < Gosu::Window
     include Constants
 
     attr_reader :stack, :sounds
 
     KEY_FUNCS = {
-      Gosu::KbEscape =>  -> { close },
-      Gosu::KbR      =>  -> { reset },
+      Gosu::KbEscape =>  -> { close if @debug },
+      Gosu::KbR      =>  -> { reset if @debug || @game_over },
       Gosu::KbP      =>  -> { @paused = !@paused },
 
       Gosu::KbDown   =>  -> { @down_pressed = true },
@@ -96,7 +95,7 @@ module Tetris
 
     def draw_overlays
       GameOverWindow.new( self ).draw && return if @game_over
-        
+
       PauseWindow.new( self ).draw if @paused
     end
 

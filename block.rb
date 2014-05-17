@@ -2,7 +2,6 @@ require './constants'
 
 module Tetris
   # Hold a (row, column) position inside the Tetris Well
-
   class GridPoint < Struct.new( :row, :column )
     include Constants
 
@@ -21,7 +20,6 @@ module Tetris
   end
 
   # Draw a constituent block of a Tetris shape.
-
   class Block
     include Constants
 

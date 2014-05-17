@@ -4,7 +4,6 @@ require './resources'
 
 module Tetris
   # Show an overlay window
-
   class OverlayWindow
     include Constants
 

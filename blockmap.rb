@@ -2,7 +2,6 @@ require './constants'
 
 module Tetris
   # Block Map, indexed Column then Row
-
   class BlockMap
     include Constants
 
@@ -33,19 +32,20 @@ module Tetris
       !@blocks[0].all? { |colour| colour == 0 }
     end
 
-    # Check for complete lines from the bottom to the top
+    # Check for complete lines from the bottom to the top and
+    # return the number removed
 
     def complete_lines( noise )
       row, lines_removed = ROWS - 1, 0
 
       loop do
-        if @blocks[row].any? { |colour| colour == 0 }
-          break if (row -= 1) < 1
-        else
+        while full_line( row )
           remove_line( row )
           noise.play
           lines_removed += 1
         end
+
+        break if (row -= 1) < 1
       end
 
       lines_removed
@@ -65,6 +65,10 @@ module Tetris
     end
 
     private
+
+    def full_line( row )
+      !@blocks[row].any? { |colour| colour == 0 }
+    end
 
     # Remove a line, dropping down all the lines above
 

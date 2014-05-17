@@ -1,6 +1,5 @@
 module Tetris
   # Constants for the Tetris Game
-
   module Constants
     WELL_BORDER = 10
     COLUMNS     = 10

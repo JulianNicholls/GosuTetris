@@ -3,7 +3,6 @@
 require 'gosu'
 
 # Hold a (x, y) pixel position, and allow for offsetting and movement
-
 class Point < Struct.new( :x, :y )
   def offset( by_x, by_y )
     Point.new( x + by_x, y + by_y )
@@ -24,7 +23,6 @@ class Point < Struct.new( :x, :y )
 end
 
 # Hold a 2-diemnsional size and allow for inflation / deflation
-
 class Size < Struct.new( :width, :height )
   def inflate( by_width, by_height )
     Size.new( width + by_width, height + by_height )
@@ -38,7 +36,6 @@ end
 
 # Add a draw_rectangle() to Gosu which simplifies drawing a simple rectangle
 # in one colour
-
 class Gosu::Window
   def draw_rectangle( point, size, z_index, colour )
     left, top     = point.x, point.y
@@ -55,7 +52,6 @@ class Gosu::Window
 end
 
 # Add a measure to return both width and height for a text
-
 class Gosu::Font
   def measure( text )
     Size.new( text_width( text, 1 ), height )

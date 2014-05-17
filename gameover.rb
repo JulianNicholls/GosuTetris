@@ -4,7 +4,6 @@ require './overlaywindow.rb'
 
 module Tetris
   # Show the window when the game is over
-
   class GameOverWindow < OverlayWindow
     include Constants
 

@@ -3,10 +3,19 @@ require './constants'
 
 module Tetris
   # Base class for the shapes
-
   class Shape
     include Constants
-    
+
+    SHAPES = {
+      1 => ->( window ) { RightEll.new( window ) },
+      2 => ->( window ) { LeftEll.new( window ) },
+      3 => ->( window ) { Tee.new( window ) },
+      4 => ->( window ) { Bar.new( window ) },
+      5 => ->( window ) { Square.new( window ) },
+      6 => ->( window ) { LeftSnake.new( window ) },
+      7 => ->( window ) { RightSnake.new( window ) }
+    }
+
     def initialize( window )
       @window = window
       @orient = 0
@@ -14,15 +23,7 @@ module Tetris
     end
 
     def self.next( window )
-      case rand( 1..7 )
-      when 1 then RightEll.new( window )
-      when 2 then LeftEll.new( window )
-      when 3 then Tee.new( window )
-      when 4 then Bar.new( window )
-      when 5 then Square.new( window )
-      when 6 then LeftSnake.new( window )
-      when 7 then RightSnake.new( window )
-      end
+      SHAPES[rand 1..7].call( window )
     end
 
     def rotate
@@ -100,13 +101,12 @@ module Tetris
     def rotatable?
       moveable?( 0, 0, (@orient + 1) % @map.size )
     end
-    
+
     def moveable?( y_delta, x_delta, o_value = @orient )
       stack = @window.stack
       @map[o_value].all? do |point|
         stack.empty?( @origin.offset( point[1] + y_delta, point[0] + x_delta ) )
       end
-      
     end
   end
 end

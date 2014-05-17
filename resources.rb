@@ -2,7 +2,6 @@
 
 module Tetris
   # Resource Loader for Tetris
-
   class ResourceLoader
     def self.fonts( window )
       {
@@ -19,8 +18,10 @@ module Tetris
 
     def self.sounds( window )
       {
-        drop:   Gosu::Sample.new( window, 'media/Gavel.wav' ),
-        smash:  Gosu::Sample.new( window, 'media/Smash.wav' )
+#        drop:   Gosu::Sample.new( window, 'media/Gavel.wav' ),
+#        smash:  Gosu::Sample.new( window, 'media/Smash.wav' )
+        drop:   Gosu::Sample.new( window, 'media/Blip.wav' ),
+        smash:  Gosu::Sample.new( window, 'media/Explosion.wav' )
       }
     end
   end
