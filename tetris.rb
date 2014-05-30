@@ -1,13 +1,14 @@
-# Tetris
+#! /usr/bin/env ruby -I.
 
-require './gosu_enhanced'
-require './constants'
-require './resources'
-require './shapes'
-require './blockmap'
-require './block'
-require './pausewindow'
-require './gameover'
+require 'gosu_enhanced'
+
+require 'constants'
+require 'resources'
+require 'shapes'
+require 'blockmap'
+require 'block'
+require 'pausewindow'
+require 'gameover'
 
 module Tetris
   # Tetris Game
@@ -69,7 +70,7 @@ module Tetris
 
         @lines += @stack.complete_lines( @sounds[:smash] )
 
-        @level      = [2, 6 - @lines / 10].max   # Speed up
+        @level      = [2, 6 - @lines / 15].max   # Speed up
         @cur, @next = @next, Shape.next( self )
       end
     end

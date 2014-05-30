@@ -1,6 +1,5 @@
-require './constants'
-require './gosu_enhanced'
-require './overlaywindow.rb'
+require 'constants'
+require 'overlaywindow.rb'
 
 module Tetris
   # Show the window when the game is over

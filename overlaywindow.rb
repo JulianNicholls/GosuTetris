@@ -1,6 +1,5 @@
-require './constants'
-require './gosu_enhanced'
-require './resources'
+require 'constants'
+require 'resources'
 
 module Tetris
   # Show an overlay window

@@ -1,5 +1,5 @@
-require './block'
-require './constants'
+require 'block'
+require 'constants'
 
 module Tetris
   # Base class for the shapes

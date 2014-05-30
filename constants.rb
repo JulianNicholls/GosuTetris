@@ -1,6 +1,10 @@
+require 'gosu_enhanced'
+
 module Tetris
   # Constants for the Tetris Game
   module Constants
+    include GosuEnhanced
+
     WELL_BORDER = 10
     COLUMNS     = 10
     ROWS        = 20

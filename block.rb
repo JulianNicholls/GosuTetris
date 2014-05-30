@@ -1,4 +1,4 @@
-require './constants'
+require 'constants'
 
 module Tetris
   # Hold a (row, column) position inside the Tetris Well

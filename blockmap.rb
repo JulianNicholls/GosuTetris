@@ -1,4 +1,4 @@
-require './constants'
+require 'constants'
 
 module Tetris
   # Block Map, indexed Column then Row
@@ -6,7 +6,7 @@ module Tetris
     include Constants
 
     def initialize
-      @blocks = Array.new( ROWS ) { |idx| Array.new( COLUMNS, 0 ) }
+      @blocks = Array.new( ROWS ) { Array.new( COLUMNS, 0 ) }
     end
 
     def at( gpoint )
