@@ -29,7 +29,7 @@ module Tetris
     }
 
     def initialize( debug )
-      super( WIDTH, HEIGHT, false, 100 )
+      super( WIDTH, HEIGHT, false, 60 )
 
       self.caption = 'Gosu Tetris'
 
@@ -39,17 +39,6 @@ module Tetris
       @debug  = debug
 
       reset
-    end
-
-    def reset
-      @lines        = 0
-      @down_time    = 0
-      @stack        = BlockMap.new
-      @cur, @next   = Shape.next( self ), Shape.next( self )
-      @down_pressed = false
-      @level        = 6     # Slow to begin with
-      @paused       = false
-      @game_over    = false
     end
 
     def update
@@ -64,25 +53,42 @@ module Tetris
       @game_over = @stack.game_over?
     end
 
-    def update_block_down
-      unless @cur.down       # Reached bottom or a block in the way
-        @stack.add( @cur.blocks )
-
-        @lines += @stack.complete_lines( @sounds[:smash] )
-
-        @level      = [2, 6 - @lines / 15].max   # Speed up
-        @cur, @next = @next, Shape.next( self )
-      end
-    end
-
     def draw
       draw_background
       draw_score
       @stack.draw( self )
       @cur.draw
-      @next.draw_absolute( NEXT.offset( BLOCK_SIDE, BLOCK_SIDE ) )
+      @next.draw_absolute( NEXT_POS.offset( BLOCK_SIDE, BLOCK_SIDE ) )
 
       draw_overlays
+    end
+
+    def button_down( btn_id )
+      instance_exec( &KEY_FUNCS[btn_id] ) if KEY_FUNCS.key? btn_id
+    end
+    
+    private
+    
+    def reset
+      @lines        = 0
+      @down_time    = 0
+      @stack        = BlockMap.new
+      @cur, @next   = Shape.next( self ), Shape.next( self )
+      @down_pressed = false
+      @level        = 10     # Slow to begin with
+      @paused       = false
+      @game_over    = false
+    end
+
+    def update_block_down
+      return if @cur.down       # Not reached bottom or a block in the way
+
+      @stack.add( @cur.blocks )
+
+      @lines += @stack.complete_lines( @sounds[:smash] )
+
+      @level      = [2, 10 - @lines / 10].max   # Speed up
+      @cur, @next = @next, Shape.next( self )
     end
 
     def draw_background
@@ -95,13 +101,9 @@ module Tetris
     end
 
     def draw_overlays
-      GameOverWindow.new( self ).draw && return if @game_over
+      return GameOverWindow.new( self ).draw if @game_over
 
       PauseWindow.new( self ).draw if @paused
-    end
-
-    def button_down( btn_id )
-      instance_exec( &KEY_FUNCS[btn_id] )
     end
   end
 end

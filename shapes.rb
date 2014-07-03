@@ -16,14 +16,14 @@ module Tetris
       7 => ->( window ) { RightSnake.new( window ) }
     }
 
+    def self.next( window )
+      SHAPES[rand 1..7].call( window )
+    end
+
     def initialize( window )
       @window = window
       @orient = 0
       @origin = GridPoint.new( 0, 3 )
-    end
-
-    def self.next( window )
-      SHAPES[rand 1..7].call( window )
     end
 
     def rotate
@@ -111,4 +111,4 @@ module Tetris
   end
 end
 
-require './dropshapes'
+require 'dropshapes'

@@ -19,7 +19,7 @@ module Tetris
     SCORE_TOP   = 20
     SCORE_LEFT  = WIDTH - (PANEL_WIDTH - 20)
 
-    NEXT        = Point.new( SCORE_LEFT, 100 )
+    NEXT_POS    = Point.new( SCORE_LEFT, 100 )
 
     # Colours
 
