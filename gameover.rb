@@ -17,18 +17,17 @@ module Tetris
     end
 
     def draw_header
-      say('GAME OVER', @fonts[:pause],
-          :center, P_ORIGIN.y + P_SIZE.height / 4, BLUE)
+      say('GAME OVER', :pause, :center, P_ORIGIN.y + P_SIZE.height / 4, BLUE)
     end
 
     def draw_keys
-      font      = @fonts[:score]
       base_row  = P_ORIGIN.y
       height    = P_SIZE.height
 
-      say('Press R to Restart', font, :center, base_row + height * 3 / 5, BLUE)
+      say('Press R to Restart', :score,
+          :center, base_row + height * 3 / 5, BLUE)
 
-      say('Press Escape to Exit', font,
+      say('Press Escape to Exit', :score,
           :center, base_row + height * 4 / 5, BLUE)
     end
   end

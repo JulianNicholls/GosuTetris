@@ -14,9 +14,7 @@ module Tetris
     end
 
     def add(blocks)
-      blocks.each do |block|
-        @blocks[block[:y]][block[:x]] = block[:colour]
-      end
+      blocks.each { |block| add_block(block) }
     end
 
     def game_over?
@@ -58,6 +56,10 @@ module Tetris
       fail 'Invalid GPoint' unless gpoint.valid?
 
       @blocks[gpoint.row][gpoint.column]
+    end
+
+    def add_block(block)
+      @blocks[block[:y]][block[:x]] = block[:colour]
     end
 
     def full_line(row)

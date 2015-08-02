@@ -12,6 +12,7 @@ module Tetris
     end
 
     def say(text, font, col, row, colour)
+      font = @fonts[font]
       size = font.measure(text)
 
       col = (WIDTH - size.width) / 2   if col == :center

@@ -38,7 +38,7 @@ module Tetris
   class Block
     include Constants
 
-    def self.set_window(window)
+    def self.surface(window)
       @window = window
     end
 

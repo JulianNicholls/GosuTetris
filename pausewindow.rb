@@ -15,8 +15,8 @@ module Tetris
       row_base  = P_ORIGIN.y
       size      = P_SIZE.height
 
-      say('PAUSED', @fonts[:pause], :center, row_base + size / 4, BLUE)
-      say('Press P to Continue', @fonts[:score],
+      say('PAUSED', :pause, :center, row_base + size / 4, BLUE)
+      say('Press P to Continue', :score,
           :center, row_base + size * 3 / 5, BLUE)
     end
   end

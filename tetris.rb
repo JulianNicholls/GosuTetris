@@ -40,7 +40,7 @@ module Tetris
       @sounds = loader.sounds
       @debug  = debug
 
-      Block.set_window(self)
+      Block.surface(self)
       reset
     end
 
