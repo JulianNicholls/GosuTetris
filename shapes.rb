@@ -52,11 +52,11 @@ module Tetris
     end
 
     def width
-      @map[@orient].map { |p| p[0] }.max + 1
+      @map[@orient].map { |point| point[0] }.max + 1
     end
 
     def height
-      @map[@orient].map { |p| p[1] }.max + 1
+      @map[@orient].map { |point| point[1] }.max + 1
     end
 
     def blocks
@@ -72,7 +72,7 @@ module Tetris
 
     def draw
       @map[@orient].each do |point|
-        Block.draw(@window, @origin.offset(point[1], point[0]), @colour)
+        Block.draw(@origin.offset(point[1], point[0]), @colour)
       end
     end
 
@@ -81,7 +81,7 @@ module Tetris
     def draw_absolute(porigin)
       @map[0].each do |point|
         Block.draw_absolute(
-          @window, porigin.offset(point[0] * BLOCK_SIDE, point[1] * BLOCK_SIDE),
+          porigin.offset(point[0] * BLOCK_SIDE, point[1] * BLOCK_SIDE),
           @colour)
       end
     end

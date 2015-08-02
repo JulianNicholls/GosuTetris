@@ -12,17 +12,25 @@ module Tetris
       @column = column
     end
 
-    def offset(by_row, by_column)
-      GridPoint.new(row + by_row, column + by_column)
+    def move_by(by_row, by_column)
+      dup.move_by!(by_row, by_column)
     end
 
-    def to_point
-      Point.new(WELL_BORDER + column * BLOCK_SIDE, row * BLOCK_SIDE)
-    end
+    alias_method :offset, :move_by
 
     def move_by!(by_row, by_column)
       @row += by_row
       @column += by_column
+
+      self
+    end
+
+    def valid?
+      row.between?(0, ROWS - 1) && column.between?(0, COLUMNS - 1)
+    end
+
+    def to_point
+      Point.new(WELL_BORDER + column * BLOCK_SIDE, row * BLOCK_SIDE)
     end
   end
 
@@ -30,20 +38,24 @@ module Tetris
   class Block
     include Constants
 
+    def self.set_window(window)
+      @window = window
+    end
+
     # Draw in the well, using a GridPoint
 
-    def self.draw(window, gridpoint, colour, outer = Gosu::Color::WHITE)
-      draw_absolute(window, gridpoint.to_point, colour, outer)
+    def self.draw(gridpoint, colour, outer = Gosu::Color::WHITE)
+      draw_absolute(gridpoint.to_point, colour, outer)
     end
 
     # Draw at an absolute pixel position
 
-    def self.draw_absolute(window, point, colour, outer = Gosu::Color::WHITE)
+    def self.draw_absolute(point, colour, outer = Gosu::Color::WHITE)
       size  = Size.new(BLOCK_SIDE, BLOCK_SIDE)
-      window.draw_rectangle(point, size, 1, outer) unless outer == 0
+      @window.draw_rectangle(point, size, 1, outer) unless outer == 0
 
-      size.inflate!(-2, -2)
-      window.draw_rectangle(point.offset(1, 1), size, 1, colour)
+      size.deflate!(2, 2)
+      @window.draw_rectangle(point.offset(1, 1), size, 1, colour)
     end
   end
 end

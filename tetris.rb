@@ -29,7 +29,7 @@ module Tetris
     }
 
     def initialize(debug)
-      super(WIDTH, HEIGHT, false, 60)
+      super(WIDTH, HEIGHT, fullscreen: false)
 
       self.caption = 'Gosu Tetris'
 
@@ -40,6 +40,7 @@ module Tetris
       @sounds = loader.sounds
       @debug  = debug
 
+      Block.set_window(self)
       reset
     end
 
@@ -58,7 +59,7 @@ module Tetris
     def draw
       draw_background
       draw_score
-      @stack.draw(self)
+      @stack.draw
       @cur.draw
       @next.draw_absolute(NEXT_POS.offset(BLOCK_SIDE, BLOCK_SIDE))
 
@@ -78,7 +79,7 @@ module Tetris
       @cur          = Shape.next(self)
       @next         = Shape.next(self)
       @down_pressed = false
-      @level        = 10     # Slow to begin with
+      @level        = 30     # Slow to begin with
       @paused       = false
       @game_over    = false
     end
@@ -92,7 +93,7 @@ module Tetris
       @sounds[:smash].play if removed > 0
       @lines += removed
 
-      @level      = [2, 10 - @lines / 10].max   # Speed up
+      @level      = [6, 30 - @lines / 3].max   # Speed up
       @cur        = @next
       @next       = Shape.next(self)
     end

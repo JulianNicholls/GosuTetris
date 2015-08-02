@@ -11,13 +11,13 @@ module Tetris
       @window = surface
     end
 
-    def say(text, font, x, y, colour)
-      size = font.measure(text) if x == :center || y == :center
+    def say(text, font, col, row, colour)
+      size = font.measure(text)
 
-      x = (WIDTH - size.width) / 2   if x == :center
-      y = (HEIGHT - size.height) / 2 if y == :center
+      col = (WIDTH - size.width) / 2   if col == :center
+      row = (HEIGHT - size.height) / 2 if row == :center
 
-      font.draw(text, x, y, 10, 1, 1, colour)
+      font.draw(text, col, row, 10, 1, 1, colour)
     end
   end
 end

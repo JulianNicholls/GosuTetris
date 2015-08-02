@@ -9,21 +9,14 @@ module Tetris
       @blocks = Array.new(ROWS) { Array.new(COLUMNS, 0) }
     end
 
-    def at(gpoint)
-      fail 'Invalid Row'    unless gpoint.row.between?(0, ROWS - 1)
-      fail 'Invalid Column' unless gpoint.column.between?(0, COLUMNS - 1)
-
-      @blocks[gpoint.row][gpoint.column]
-    end
-
     def empty?(gpoint)
-      gpoint.row < ROWS &&
-        gpoint.column.between?(0, COLUMNS - 1) &&
-        at(gpoint) == 0
+      gpoint.valid? && at(gpoint) == 0
     end
 
     def add(blocks)
-      blocks.each { |b| @blocks[b[:y]][b[:x]] = b[:colour] }
+      blocks.each do |block|
+        @blocks[block[:y]][block[:x]] = block[:colour]
+      end
     end
 
     def game_over?
@@ -53,18 +46,19 @@ module Tetris
 
     # Draw the occupied blocks, with no outer line.
 
-    def draw(window)
-      @blocks.each_with_index do |columns, ridx|
-        columns.each_with_index do |colour, cidx|
-          next if colour == 0
-
-          gpoint = GridPoint.new(ridx, cidx)
-          Block.draw(window, gpoint, colour, 0)
-        end
+    def draw
+      @blocks.each_with_index do |columns, idx|
+        draw_row(columns, idx)
       end
     end
 
     private
+
+    def at(gpoint)
+      fail 'Invalid GPoint' unless gpoint.valid?
+
+      @blocks[gpoint.row][gpoint.column]
+    end
 
     def full_line(row)
       !@blocks[row].any? { |colour| colour == 0 }
@@ -72,9 +66,18 @@ module Tetris
 
     # Remove a line, dropping down all the lines above
 
-    def remove_line(row)
-      row.downto(1).each { |r| @blocks[r] = @blocks[r - 1] }
+    def remove_line(start_row)
+      start_row.downto(1).each { |row| @blocks[row] = @blocks[row - 1] }
       @blocks[0] = Array.new(COLUMNS, 0)
+    end
+
+    def draw_row(row, row_idx)
+      row.each_with_index do |colour, idx|
+        next if colour == 0
+
+        gpoint = GridPoint.new(row_idx, idx)
+        Block.draw(gpoint, colour, 0)
+      end
     end
   end
 end

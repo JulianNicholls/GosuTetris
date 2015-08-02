@@ -22,11 +22,14 @@ module Tetris
     end
 
     def draw_keys
-      say('Press R to Restart', @fonts[:score],
-          :center, P_ORIGIN.y + P_SIZE.height * 3 / 5, BLUE)
+      font      = @fonts[:score]
+      base_row  = P_ORIGIN.y
+      height    = P_SIZE.height
 
-      say('Press Escape to Exit', @fonts[:score],
-          :center, P_ORIGIN.y + P_SIZE.height * 4 / 5, BLUE)
+      say('Press R to Restart', font, :center, base_row + height * 3 / 5, BLUE)
+
+      say('Press Escape to Exit', font,
+          :center, base_row + height * 4 / 5, BLUE)
     end
   end
 end

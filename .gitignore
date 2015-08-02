@@ -1,4 +1,2 @@
-.rubocop.yml
-drawonly.rb
 *~
-
+*.swp
