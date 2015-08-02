@@ -18,7 +18,7 @@ module Tetris
     attr_reader :stack, :sounds
 
     KEY_FUNCS = {
-      Gosu::KbEscape =>  -> { close if @debug },
+      Gosu::KbEscape =>  -> { close if @debug || @game_over },
       Gosu::KbR      =>  -> { reset if @debug || @game_over },
       Gosu::KbP      =>  -> { @paused = !@paused },
 
@@ -28,14 +28,16 @@ module Tetris
       Gosu::KbUp     =>  -> { @cur.rotate }
     }
 
-    def initialize( debug )
-      super( WIDTH, HEIGHT, false, 60 )
+    def initialize(debug)
+      super(WIDTH, HEIGHT, false, 60)
 
       self.caption = 'Gosu Tetris'
 
-      @fonts  = ResourceLoader.fonts( self )
-      @images = ResourceLoader.images( self )
-      @sounds = ResourceLoader.sounds( self )
+      loader = ResourceLoader.new(self)
+
+      @fonts  = loader.fonts
+      @images = loader.images
+      @sounds = loader.sounds
       @debug  = debug
 
       reset
@@ -56,24 +58,25 @@ module Tetris
     def draw
       draw_background
       draw_score
-      @stack.draw( self )
+      @stack.draw(self)
       @cur.draw
-      @next.draw_absolute( NEXT_POS.offset( BLOCK_SIDE, BLOCK_SIDE ) )
+      @next.draw_absolute(NEXT_POS.offset(BLOCK_SIDE, BLOCK_SIDE))
 
       draw_overlays
     end
 
-    def button_down( btn_id )
-      instance_exec( &KEY_FUNCS[btn_id] ) if KEY_FUNCS.key? btn_id
+    def button_down(btn_id)
+      instance_exec(&KEY_FUNCS[btn_id]) if KEY_FUNCS.key? btn_id
     end
-    
+
     private
-    
+
     def reset
       @lines        = 0
       @down_time    = 0
       @stack        = BlockMap.new
-      @cur, @next   = Shape.next( self ), Shape.next( self )
+      @cur          = Shape.next(self)
+      @next         = Shape.next(self)
       @down_pressed = false
       @level        = 10     # Slow to begin with
       @paused       = false
@@ -83,27 +86,30 @@ module Tetris
     def update_block_down
       return if @cur.down       # Not reached bottom or a block in the way
 
-      @stack.add( @cur.blocks )
+      @stack.add(@cur.blocks)
 
-      @lines += @stack.complete_lines( @sounds[:smash] )
+      removed = @stack.complete_lines
+      @sounds[:smash].play if removed > 0
+      @lines += removed
 
       @level      = [2, 10 - @lines / 10].max   # Speed up
-      @cur, @next = @next, Shape.next( self )
+      @cur        = @next
+      @next       = Shape.next(self)
     end
 
     def draw_background
-      @images[:background].draw( 0, 0, 0 )
+      @images[:background].draw(0, 0, 0)
     end
 
     def draw_score
-      @fonts[:score].draw( "Lines: #{@lines}", SCORE_LEFT, SCORE_TOP, 1,
-                           1, 1, Gosu::Color::WHITE )
+      @fonts[:score].draw("Lines: #{@lines}", SCORE_LEFT, SCORE_TOP, 1,
+                          1, 1, Gosu::Color::WHITE)
     end
 
     def draw_overlays
-      return GameOverWindow.new( self ).draw if @game_over
+      return GameOverWindow.new(self).draw if @game_over
 
-      PauseWindow.new( self ).draw if @paused
+      PauseWindow.new(self).draw if @paused
     end
   end
 end
@@ -111,5 +117,5 @@ end
 debug = ARGV.first == '--debug'
 puts 'Debug Mode' if debug
 
-window = Tetris::Game.new( debug )
+window = Tetris::Game.new(debug)
 window.show

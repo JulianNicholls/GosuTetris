@@ -1,8 +1,8 @@
 module Tetris
   # A Right-handed Ell
   class RightEll < Shape
-    def initialize( window )
-      super( window )
+    def initialize(window)
+      super(window)
 
       @map = [
         [[0, 0], [1, 0], [2, 0], [0, 1]],
@@ -17,8 +17,8 @@ module Tetris
 
   # A Left-handed Ell
   class LeftEll < Shape
-    def initialize( window )
-      super( window )
+    def initialize(window)
+      super(window)
 
       @map = [
         [[0, 0], [1, 0], [2, 0], [2, 1]],
@@ -33,8 +33,8 @@ module Tetris
 
   # A Bar
   class Bar < Shape
-    def initialize( window )
-      super( window )
+    def initialize(window)
+      super(window)
 
       @map = [
         [[0, 0], [1, 0], [2, 0], [3, 0]],
@@ -47,8 +47,8 @@ module Tetris
 
   # A T-shape
   class Tee < Shape
-    def initialize( window )
-      super( window )
+    def initialize(window)
+      super(window)
 
       @map = [
         [[0, 0], [1, 0], [2, 0], [1, 1]],
@@ -63,8 +63,8 @@ module Tetris
 
   # A Square
   class Square < Shape
-    def initialize( window )
-      super( window )
+    def initialize(window)
+      super(window)
 
       @map = [
         [[0, 0], [1, 0], [0, 1], [1, 1]]
@@ -76,8 +76,8 @@ module Tetris
 
   # A left snake / stair
   class LeftSnake < Shape
-    def initialize( window )
-      super( window )
+    def initialize(window)
+      super(window)
 
       @map = [
         [[0, 0], [1, 0], [1, 1], [2, 1]],
@@ -90,8 +90,8 @@ module Tetris
 
   # A right snake / stair
   class RightSnake < Shape
-    def initialize( window )
-      super( window )
+    def initialize(window)
+      super(window)
 
       @map = [
         [[1, 0], [2, 0], [0, 1], [1, 1]],

@@ -6,24 +6,24 @@ module Tetris
     include Constants
 
     def initialize
-      @blocks = Array.new( ROWS ) { Array.new( COLUMNS, 0 ) }
+      @blocks = Array.new(ROWS) { Array.new(COLUMNS, 0) }
     end
 
-    def at( gpoint )
-      fail 'Invalid Row'    unless gpoint.row.between?( 0, ROWS - 1 )
-      fail 'Invalid Column' unless gpoint.column.between?( 0, COLUMNS - 1 )
+    def at(gpoint)
+      fail 'Invalid Row'    unless gpoint.row.between?(0, ROWS - 1)
+      fail 'Invalid Column' unless gpoint.column.between?(0, COLUMNS - 1)
 
       @blocks[gpoint.row][gpoint.column]
     end
 
-    def empty?( gpoint )
+    def empty?(gpoint)
       gpoint.row < ROWS &&
-      gpoint.column.between?( 0, COLUMNS - 1 ) &&
-      at( gpoint ) == 0
+        gpoint.column.between?(0, COLUMNS - 1) &&
+        at(gpoint) == 0
     end
 
-    def add( blocks )
-      blocks.each { |b| @blocks[b[:gpoint].row][b[:gpoint].column] = b[:colour] }
+    def add(blocks)
+      blocks.each { |b| @blocks[b[:y]][b[:x]] = b[:colour] }
     end
 
     def game_over?
@@ -35,13 +35,13 @@ module Tetris
     # Check for complete lines from the bottom to the top and
     # return the number removed
 
-    def complete_lines( noise )
-      row, lines_removed = ROWS - 1, 0
+    def complete_lines
+      row = ROWS - 1
+      lines_removed = 0
 
       loop do
-        while full_line( row )
-          remove_line( row )
-          noise.play
+        while full_line(row)
+          remove_line(row)
           lines_removed += 1
         end
 
@@ -53,28 +53,28 @@ module Tetris
 
     # Draw the occupied blocks, with no outer line.
 
-    def draw( window )
+    def draw(window)
       @blocks.each_with_index do |columns, ridx|
         columns.each_with_index do |colour, cidx|
           next if colour == 0
 
-          gpoint = GridPoint.new( ridx, cidx )
-          Block.draw( window, gpoint, colour, 0 )
+          gpoint = GridPoint.new(ridx, cidx)
+          Block.draw(window, gpoint, colour, 0)
         end
       end
     end
 
     private
 
-    def full_line( row )
+    def full_line(row)
       !@blocks[row].any? { |colour| colour == 0 }
     end
 
     # Remove a line, dropping down all the lines above
 
-    def remove_line( row )
-      row.downto( 1 ).each { |r| @blocks[r] = @blocks[r - 1] }
-      @blocks[0] = Array.new( COLUMNS, 0 )
+    def remove_line(row)
+      row.downto(1).each { |r| @blocks[r] = @blocks[r - 1] }
+      @blocks[0] = Array.new(COLUMNS, 0)
     end
   end
 end
