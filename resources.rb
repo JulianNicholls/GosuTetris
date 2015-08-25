@@ -16,14 +16,14 @@ module Tetris
 
     def images
       {
-        background:   Gosu::Image.new(@window, 'media/background.png', true)
+        background:   Gosu::Image.new('media/background.png')
       }
     end
 
     def sounds
       {
-        drop:   Gosu::Sample.new(@window, 'media/Blip.wav'),
-        smash:  Gosu::Sample.new(@window, 'media/Explosion.wav')
+        drop:   Gosu::Sample.new('media/Blip.wav'),
+        smash:  Gosu::Sample.new('media/Explosion.wav')
       }
     end
   end
