@@ -16,7 +16,7 @@ module Tetris
       dup.move_by!(by_row, by_column)
     end
 
-    alias_method :offset, :move_by
+    alias offset move_by
 
     def move_by!(by_row, by_column)
       @row += by_row
@@ -51,7 +51,7 @@ module Tetris
     # Draw at an absolute pixel position
 
     def self.draw_absolute(point, colour, outer = Gosu::Color::WHITE)
-      size  = Size.new(BLOCK_SIDE, BLOCK_SIDE)
+      size = Size.new(BLOCK_SIDE, BLOCK_SIDE)
       @window.draw_rectangle(point, size, 1, outer) unless outer == 0
 
       size.deflate!(2, 2)

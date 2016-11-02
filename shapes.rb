@@ -14,7 +14,7 @@ module Tetris
       5 => ->(window) { Square.new(window) },
       6 => ->(window) { LeftSnake.new(window) },
       7 => ->(window) { RightSnake.new(window) }
-    }
+    }.freeze
 
     def self.next(window)
       SHAPES[rand 1..7].call(window)
@@ -40,7 +40,7 @@ module Tetris
         @window.sounds[:drop].play unless downable?
       end
 
-      ok    # Return whether we moved so that we know when the bottom is reached
+      ok # Return whether we moved so that we know when the bottom is reached
     end
 
     def right
@@ -82,7 +82,8 @@ module Tetris
       @map[0].each do |point|
         Block.draw_absolute(
           porigin.offset(point[0] * BLOCK_SIDE, point[1] * BLOCK_SIDE),
-          @colour)
+          @colour
+        )
       end
     end
 

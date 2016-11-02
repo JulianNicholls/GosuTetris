@@ -26,7 +26,7 @@ module Tetris
       Gosu::KbLeft   =>  -> { @cur.left },
       Gosu::KbRight  =>  -> { @cur.right },
       Gosu::KbUp     =>  -> { @cur.rotate }
-    }
+    }.freeze
 
     def initialize(debug)
       super(WIDTH, HEIGHT, fullscreen: false)
@@ -48,7 +48,7 @@ module Tetris
       unless @paused || @game_over
         @down_time = (@down_time + 1) % @level
 
-        update_block_down if (@down_time == 0 && !@debug) || @down_pressed
+        update_block_down if (@down_time.zero? && !@debug) || @down_pressed
 
         @down_pressed = false
       end
@@ -79,13 +79,13 @@ module Tetris
       @cur          = Shape.next(self)
       @next         = Shape.next(self)
       @down_pressed = false
-      @level        = 30     # Slow to begin with
+      @level        = 30 # Slow to begin with
       @paused       = false
       @game_over    = false
     end
 
     def update_block_down
-      return if @cur.down       # Not reached bottom or a block in the way
+      return if @cur.down # Not reached bottom or a block in the way
 
       @stack.add(@cur.blocks)
 
@@ -93,9 +93,9 @@ module Tetris
       @sounds[:smash].play if removed > 0
       @lines += removed
 
-      @level      = [6, 30 - @lines / 3].max   # Speed up
-      @cur        = @next
-      @next       = Shape.next(self)
+      @level = [6, 30 - @lines / 3].max # Speed up
+      @cur   = @next
+      @next  = Shape.next(self)
     end
 
     def draw_background
