@@ -52,7 +52,7 @@ module Tetris
 
     def self.draw_absolute(point, colour, outer = Gosu::Color::WHITE)
       size = Size.new(BLOCK_SIDE, BLOCK_SIDE)
-      @window.draw_rectangle(point, size, 1, outer) unless outer.zero?
+      @window.draw_rectangle(point, size, 1, outer) unless outer == 0
 
       size.deflate!(2, 2)
       @window.draw_rectangle(point.offset(1, 1), size, 1, colour)
