@@ -103,7 +103,7 @@ module Tetris
     end
 
     def draw_score
-      @fonts[:score].draw("Lines: #{@lines}", SCORE_LEFT, SCORE_TOP, 1,
+      @fonts[:score].draw_text("Lines: #{@lines}", SCORE_LEFT, SCORE_TOP, 1,
                           1, 1, Gosu::Color::WHITE)
     end
 
